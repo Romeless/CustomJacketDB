@@ -9,7 +9,7 @@ class Users extends Entity
     {
         $salt = uniqid('',true);
         $this->attributes['salt'] = $salt;
-        $this->attributes['password'] = md($salt, $pass);
+        $this->attributes['password'] = password_hash($pass, PASSWORD_DEFAULT, [$salt]);
 
         return $this;
     }

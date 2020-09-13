@@ -33,4 +33,42 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+
+	
+	public $register = [
+		'username' => [
+			'rules' => 'required|min_length[5]|is_unique[users.username]',
+		],
+		'password' => [
+			'rules' => 'required',
+		],
+		'fullName' => [
+			'rules' => 'required',
+		],
+		'address' => [
+			'rules' => 'required',
+		],
+		'email' => [
+			'rules' => 'required',
+		],
+	];
+
+	public $add_design = [
+		'userID' => [
+			'rules' => 'required',
+		],
+		'designName' => [
+			'rules' => 'required',
+		],
+		'designType' => [
+			'rules' => 'required',
+		],
+		'filePath' => [
+			'rules' => 'required',
+		],
+		'detail' => [
+			'rules' => 'required',
+		],
+	];
+
 }
