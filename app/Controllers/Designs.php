@@ -31,6 +31,8 @@ class Designs extends ResourceController
 
         $design = new \App\Entities\Designs();
         $design->fill($data);
+        $design->createDate = date(DATE_FORMAT);
+        $design->updateDate = date(DATE_FORMAT);
 
         if($this->model->save($design))
         {

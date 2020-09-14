@@ -40,6 +40,9 @@ defined('MONTH')  || define('MONTH', 2592000);
 defined('YEAR')   || define('YEAR', 31536000);
 defined('DECADE') || define('DECADE', 315360000);
 
+
+# ------------------------------------------------- #
+defined('DATE_FORMAT') || define('DATE_FORMAT', 'Y-m-d H:i:s');
 /*
 |--------------------------------------------------------------------------
 | Exit Status Codes

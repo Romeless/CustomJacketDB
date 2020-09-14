@@ -31,6 +31,7 @@ class Users extends ResourceController
 
         $user = new \App\Entities\Users();
         $user->fill($data);
+        $user->joinDate = date(DATE_FORMAT);
 
         if($this->model->save($user))
         {

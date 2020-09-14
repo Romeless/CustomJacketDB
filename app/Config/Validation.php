@@ -37,15 +37,12 @@ class Validation
 	
 	public $register = [
 		'username' => [
-			'rules' => 'required|min_length[5]|is_unique[users.username]',
+			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username]',
 		],
 		'password' => [
 			'rules' => 'required',
 		],
 		'fullName' => [
-			'rules' => 'required',
-		],
-		'address' => [
 			'rules' => 'required',
 		],
 		'email' => [
