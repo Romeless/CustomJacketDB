@@ -12,4 +12,16 @@ class DesignsModel extends Model
         'userID', 'designName', 'designType', 'filePath', 'detail', 'createdDate', 'updateDate',
     ];
     protected $returnType = 'App\Entities\Designs';
+
+    public function findById($id)
+    {
+        $data = $this->find($id);
+
+        if($data)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

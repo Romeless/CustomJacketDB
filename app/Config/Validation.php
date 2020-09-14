@@ -83,4 +83,22 @@ class Validation
 		],
 	];
 
+	public $update_design = [
+		'userID' => [
+			'rules' => 'required',
+		],
+		'designName' => [
+			'rules' => 'required',
+		],
+		'designType' => [
+			'rules' => 'required',
+		],
+		'filePath' => [
+			'rules' => 'required',
+		],
+		'detail' => [
+			'rules' => 'required',
+		],
+	];
+
 }

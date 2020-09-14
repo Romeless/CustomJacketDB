@@ -39,4 +39,44 @@ class Designs extends ResourceController
             return $this->respondCreated($design, 'Design Created');
         }
     }
+
+    public function update($id = null)
+    {
+
+        $data = $this->request->getRawInput();
+        $data['id'] = $id;
+        $validate = $this->validation->run($data, 'update_design');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('design id tidak ditemukan');
+        }
+
+        $design = new \App\Entities\Designs();
+        $design->fill($data);
+
+        if($this->model->save($design))
+        {
+            return $this->respondUpdated($design, 'Design Updated');
+        }
+
+    }
+
+    public function delete($id = null)
+    {
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('id tidak ditemukan');
+        }
+
+        if($this->model->delete($id)){
+            return $this->respondDeleted('Design Id '.$id.' Deleted');
+        }
+    }
 }
