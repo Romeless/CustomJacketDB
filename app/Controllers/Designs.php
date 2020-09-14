@@ -79,4 +79,16 @@ class Designs extends ResourceController
             return $this->respondDeleted('Design Id '.$id.' Deleted');
         }
     }
+
+    public function show($id = null)
+    {
+        $data = $this->model->findById($id);
+
+        if($data)
+        {
+            return $this->respond($data);
+        }
+
+        return $this->fail('errors');
+    }
 }

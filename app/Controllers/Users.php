@@ -78,4 +78,16 @@ class Users extends ResourceController
             return $this->respondDeleted('Id '.$id.' Deleted');
         }
     }
+
+    public function show($id = null)
+    {
+        $data = $this->model->findById($id);
+
+        if($data)
+        {
+            return $this->respond($data);
+        }
+
+        return $this->fail('errors');
+    }
 }
