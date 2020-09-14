@@ -38,4 +38,44 @@ class Users extends ResourceController
             return $this->respondCreated($user, 'User Created');
         }
     }
+
+    public function update($id = null)
+    {
+
+        $data = $this->request->getRawInput();
+        $data['id'] = $id;
+        $validate = $this->validation->run($data, 'update_user');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('id tidak ditemukan');
+        }
+
+        $user = new \App\Entities\Users();
+        $user->fill($data);
+
+        if($this->model->save($user))
+        {
+            return $this->respondUpdated($user, 'User Updated');
+        }
+
+    }
+
+    public function delete($id = null)
+    {
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('id tidak ditemukan');
+        }
+
+        if($this->model->delete($id)){
+            return $this->respondDeleted('Id '.$id.' Deleted');
+        }
+    }
 }
