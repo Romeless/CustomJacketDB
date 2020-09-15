@@ -12,6 +12,9 @@ class DesignsModel extends Model
         'userID', 'designName', 'designType', 'filePath', 'detail', 'createdDate', 'updateDate',
     ];
 
+    protected $returnType = 'json';
+    protected $useTimestamps = false;
+
     public function findById($id)
     {
         $data = $this->find($id);

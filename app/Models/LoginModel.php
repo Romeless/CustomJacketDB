@@ -13,6 +13,9 @@ class LoginModel extends Model
         'username', 'password', 'salt',
     ];
 
+    protected $returnType = 'array';
+    protected $useTimestamps = false;
+
 
     public function findByUsername($username)
     {

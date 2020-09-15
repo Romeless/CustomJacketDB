@@ -114,15 +114,15 @@ class Users extends ResourceController
                 return $this->fail('WrongPassword '.$login['password']);
             }
 
-            return $this->generateToken();
+            return json_encode($this->generateToken());
         }
 
         return $this->fail('errors');
     }
 
-    public function generateToken()
+    public function generateToken($length = 60)
     {
-        return 0;
+        return ['token' => bin2hex(random_bytes($length))];
     }
 
 }

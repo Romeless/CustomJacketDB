@@ -13,7 +13,8 @@ class UsersModel extends Model
         'username', 'fullName', 'password', 'salt', 'email', 'address', 'phoneNumber', 'joinDate',
     ];
     protected $returnType = 'App\Entities\Users';
-
+    protected $useTimestamps = false;
+    
     public function findById($id)
     {
         $data = $this->find($id);
