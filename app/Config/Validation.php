@@ -101,4 +101,12 @@ class Validation
 		],
 	];
 
+	public $login = [
+		'username' => [
+			'rules' => 'required',
+		],
+		'password' => [
+			'rules' => 'required',
+		],
+	];
 }
