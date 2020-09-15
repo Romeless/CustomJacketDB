@@ -11,7 +11,6 @@ class DesignsModel extends Model
     protected $allowedFields = [
         'userID', 'designName', 'designType', 'filePath', 'detail', 'createdDate', 'updateDate',
     ];
-    protected $returnType = 'App\Entities\Designs';
 
     public function findById($id)
     {

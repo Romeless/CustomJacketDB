@@ -90,4 +90,26 @@ class Users extends ResourceController
 
         return $this->fail('errors');
     }
+
+    public function login($username)
+    {
+        
+        $model = model('App\Models\LoginModel', false);
+
+        $data = $model->findByUsername($username);
+
+        if($data)
+        {
+            $credentials = [
+                "username" => $data['username'],
+                "password" => $data['password'],
+                "salt" => $data['salt'],
+            ];
+
+            return $this->respond($credentials);
+        }
+
+        return $this->fail('errors');
+    }
+
 }
