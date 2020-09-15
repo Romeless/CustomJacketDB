@@ -91,25 +91,38 @@ class Users extends ResourceController
         return $this->fail('errors');
     }
 
-    public function login($username)
+    public function login()
     {
+
+        $login = $this->request->getPost();
+        $validate = $this->validation->run($login, 'login');
+        $errors = $this->validation->getErrors();
         
         $model = model('App\Models\LoginModel', false);
 
-        $data = $model->findByUsername($username);
+        $credentials = $model->findByUsername($login['username']);
 
-        if($data)
+        if($credentials)
         {
-            $credentials = [
-                "username" => $data['username'],
-                "password" => $data['password'],
-                "salt" => $data['salt'],
-            ];
+            if ($login['username'] != $credentials['username'])
+            {
+                return $this->fail('something went wrong');
+            }
 
-            return $this->respond($credentials);
+            if (!password_verify($login['password'], $credentials['password']))
+            {
+                return $this->fail('WrongPassword '.$login['password']);
+            }
+
+            return $this->generateToken();
         }
 
         return $this->fail('errors');
+    }
+
+    public function generateToken()
+    {
+        return 0;
     }
 
 }
