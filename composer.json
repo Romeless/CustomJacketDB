@@ -20,7 +20,9 @@
 	},
 	"scripts": {
 		"post-update-cmd": [
-			"@composer dump-autoload"
+			"@composer dump-autoload",
+			"php artisan clear-compiled",
+            "chmod -R 777 public/"
 		],
 		"test": "phpunit"
 	},
