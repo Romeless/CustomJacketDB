@@ -29,12 +29,13 @@ class Database extends \CodeIgniter\Database\Config
 	 *
 	 * @var array
 	 */
+
 	public $default = [
 		'DSN'      => '',
-		'hostname' => 'localhost',
-		'username' => '',
-		'password' => '',
-		'database' => '',
+		'hostname' => 'durvbryvdw2sjcm5.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+		'username' => 'bcjvq3a5i0p5bqiq',
+		'password' => 'azo3snkw7owldi6c',
+		'database' => 'kji8wgna4iei3zc4',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
