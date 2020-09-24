@@ -9,7 +9,7 @@ class DesignsModel extends Model
     protected $table = 'designs';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'userID', 'designName', 'designType', 'filePath', 'detail', 'createdDate', 'updateDate',
+        'userID', 'designName', 'designType', 'filePath', 'detail', 'createDate', 'updateDate',
     ];
 
     protected $returnType = 'json';
