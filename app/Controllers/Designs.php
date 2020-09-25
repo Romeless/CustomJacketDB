@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Controllers;
+use CodeIgniter\RESTful\ResourceController;
 
-class Designs extends BaseController
+class Designs extends ResourceController
 {
     protected $modelName = 'App\Models\DesignsModel';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->model = model('App\Models\DesignsModel');
         $this->validation = \Config\Services::validation();
     }
 
