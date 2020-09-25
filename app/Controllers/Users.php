@@ -9,6 +9,7 @@ class Users extends BaseController
 
     public function __construct()
     {
+        $this->model = model('App\Models\UsersModel');
         $this->validation = \Config\Services::validation();
     }
 
