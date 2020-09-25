@@ -9,6 +9,7 @@ class Designs extends BaseController
 
     public function __construct()
     {
+        $this->model = model($modelName);
         $this->validation = \Config\Services::validation();
     }
 
