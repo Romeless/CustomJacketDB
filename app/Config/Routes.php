@@ -33,8 +33,8 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->resource('users');
 
-$routes->get('/todo/api/0.1/Users', '/todo/api/0.1/Users');
-$routes->get('/todo/api/0.1/Designs', '/todo/api/0.1/Designs');
+$routes->get('/todo/api/0.1/Users', 'Users::index');
+$routes->get('/todo/api/0.1/Designs', 'Designs::index');
 /**
  * --------------------------------------------------------------------
  * Additional Routing
