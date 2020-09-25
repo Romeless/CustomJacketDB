@@ -30,14 +30,11 @@ class TokenModel extends Model
 
     public function findByUserID($userID)
     {
-        $sql = "SELECT $userID FROM userID";
-        
-        if($result = mysqli_query($this->db, $sql))
+        $sql = "SELECT * FROM tokens WHERE userID = ?";
+
+        if($result = $this->db->query($sql, [$userID]))
         {
-            return $result;
-        } else
-        {
-            return 0;
-        }
+            return $result->getResult();
+        } 
     }
 }

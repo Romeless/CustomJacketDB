@@ -106,7 +106,7 @@ class Users extends ResourceController
         {
             if ($login['username'] != $credentials['username'])
             {
-                return $this->fail('something went wrong');
+                return $this->fail('Something went Wrong');
             }
 
             if (!password_verify($login['password'], $credentials['password']))
@@ -117,6 +117,24 @@ class Users extends ResourceController
             $token_model = model('App\Models\TokenModel', false);
 
             $token = json_encode($this->generateToken());
+
+            if ($userID = $this->model->findByUserName($credentials['username'])[0]['id'])
+            {
+                $tokenData = new \App\Entities\Tokens();
+                $tokenData->token = $token;
+                $tokenData->userID = $userID;
+                $tokenData->device = 'IMPLEMENTATION';
+                $tokenData->createDate = date(DATE_FORMAT);
+                $tokenData->expireDate = date(DATE_FORMAT)->modify('+365 days')->format(DATE_FORMAT);
+
+
+                if($token_model->save($tokenData))
+                {
+                    return $token;
+                }
+            }
+
+
         }
 
         return $this->fail('errors');
