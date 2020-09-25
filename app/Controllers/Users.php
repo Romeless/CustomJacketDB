@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Controllers;
+use CodeIgniter\RESTful\ResourceController;
 
-class Users extends BaseController
+class Users extends ResourceController
 {
     protected $modelName = 'App\Models\UsersModel';
     protected $format = 'json';
 
     public function __construct()
     {
-        $this->model = model('App\Models\UsersModel');
         $this->validation = \Config\Services::validation();
     }
 
