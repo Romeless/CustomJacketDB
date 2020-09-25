@@ -22,7 +22,7 @@
 		"post-update-cmd": [
 			"@composer dump-autoload",
 			"php artisan clear-compiled",
-            "chmod -R 777 public/"
+            "chmod -R 775 public/"
 		],
 		"test": "phpunit"
 	},
