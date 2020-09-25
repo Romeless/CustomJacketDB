@@ -111,10 +111,12 @@ class Users extends ResourceController
 
             if (!password_verify($login['password'], $credentials['password']))
             {
-                return $this->fail('WrongPassword '.$login['password']);
+                return $this->fail('Wrong Password '.$login['password']);
             }
 
-            return json_encode($this->generateToken());
+            $token_model = model('App\Models\TokenModel', false);
+
+            $token = json_encode($this->generateToken());
         }
 
         return $this->fail('errors');

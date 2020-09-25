@@ -31,19 +31,19 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->get('/Token', 'Token::index');
 
+$routes->add('/todo/api/0.1/users', 'Users::index');
+$routes->add('/todo/api/0.1/users/create', 'Users::create');
+$routes->add('/todo/api/0.1/users/update', 'Users::update');
+$routes->add('/todo/api/0.1/users/show', 'Users::show');
+$routes->add('/todo/api/0.1/users/login', 'Users::login');
+$routes->add('/todo/api/0.1/users/generateToken', 'Users::generateToken');
 
-$routes->add('/todo/api/0.1/Users', 'Users::index');
-$routes->add('/todo/api/0.1/Users/create', 'Users::create');
-$routes->add('/todo/api/0.1/Users/update', 'Users::update');
-$routes->add('/todo/api/0.1/Users/show', 'Users::show');
-$routes->add('/todo/api/0.1/Users/login', 'Users::login');
-$routes->add('/todo/api/0.1/Users/generateToken', 'Users::generateToken');
-
-$routes->add('/todo/api/0.1/Designs', 'Designs::index');
-$routes->add('/todo/api/0.1/Designs/create', 'Designs::create');
-$routes->add('/todo/api/0.1/Designs/update', 'Designs::update');
-$routes->add('/todo/api/0.1/Designs/show', 'Designs::show');
+$routes->add('/todo/api/0.1/designs', 'Designs::index');
+$routes->add('/todo/api/0.1/designs/create', 'Designs::create');
+$routes->add('/todo/api/0.1/designs/update', 'Designs::update');
+$routes->add('/todo/api/0.1/designs/show', 'Designs::show');
 
 /**
  * --------------------------------------------------------------------
