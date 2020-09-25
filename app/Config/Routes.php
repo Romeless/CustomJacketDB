@@ -33,17 +33,17 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 
 
-$routes->get('/todo/api/0.1/Users', 'Users::index');
-$routes->get('/todo/api/0.1/Users/create', 'Users::create');
-$routes->get('/todo/api/0.1/Users/update', 'Users::update');
-$routes->get('/todo/api/0.1/Users/show', 'Users::show');
-$routes->get('/todo/api/0.1/Users/login', 'Users::login');
-$routes->get('/todo/api/0.1/Users/generateToken', 'Users::generateToken');
+$routes->add('/todo/api/0.1/Users', 'Users::index');
+$routes->add('/todo/api/0.1/Users/create', 'Users::create');
+$routes->add('/todo/api/0.1/Users/update', 'Users::update');
+$routes->add('/todo/api/0.1/Users/show', 'Users::show');
+$routes->add('/todo/api/0.1/Users/login', 'Users::login');
+$routes->add('/todo/api/0.1/Users/generateToken', 'Users::generateToken');
 
-$routes->get('/todo/api/0.1/Designs', 'Designs::index');
-$routes->get('/todo/api/0.1/Designs/create', 'Designs::create');
-$routes->get('/todo/api/0.1/Designs/update', 'Designs::update');
-$routes->get('/todo/api/0.1/Designs/show', 'Designs::show');
+$routes->add('/todo/api/0.1/Designs', 'Designs::index');
+$routes->add('/todo/api/0.1/Designs/create', 'Designs::create');
+$routes->add('/todo/api/0.1/Designs/update', 'Designs::update');
+$routes->add('/todo/api/0.1/Designs/show', 'Designs::show');
 
 /**
  * --------------------------------------------------------------------
