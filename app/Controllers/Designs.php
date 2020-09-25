@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Controllers;
-use CodeIgniter\RESTful\ResourceController;
 
-class Designs extends ResourceController
+class Designs extends BaseController
 {
     protected $modelName = 'App\Models\DesignsModel';
     protected $format = 'json';

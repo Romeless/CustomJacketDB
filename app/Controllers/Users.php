@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Controllers;
-use CodeIgniter\RESTful\ResourceController;
 
-class Users extends ResourceController
+class Users extends BaseController
 {
     protected $modelName = 'App\Models\UsersModel';
     protected $format = 'json';
