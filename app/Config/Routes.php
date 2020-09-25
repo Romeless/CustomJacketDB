@@ -31,8 +31,9 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
-$routes->resource('users');
 
+
+$routes->resource('/todo/api/0.1/Users');
 $routes->get('/todo/api/0.1/Users', 'Users::index');
 $routes->get('/todo/api/0.1/Designs', 'Designs::index');
 /**
