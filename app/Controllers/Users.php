@@ -132,6 +132,8 @@ class Users extends ResourceController
                 {
                     return $token;
                 }
+            } else {
+                return $this->fail('Username not found');
             }
 
 
