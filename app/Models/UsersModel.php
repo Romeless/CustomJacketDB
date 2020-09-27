@@ -12,7 +12,7 @@ class UsersModel extends Model
     protected $allowedFields = [
         'username', 'fullName', 'email', 'address', 'phoneNumber', 'joinDate',
     ];
-    protected $returnType = 'array';
+    protected $returnType = 'App/Entities/Users';
     protected $useTimestamps = false;
     
 
