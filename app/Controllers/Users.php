@@ -69,6 +69,9 @@ class Users extends ResourceController
 
     public function delete($id = null)
     {
+        $data = $this->request->getRawInput();
+        $data['id'] = $id;
+        
         if(!$this->model->findById($id))
         {
             return $this->fail('id tidak ditemukan');
