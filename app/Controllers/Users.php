@@ -111,7 +111,7 @@ class Users extends ResourceController
         $validate = $this->validation->run($login, 'login');
         $errors = $this->validation->getErrors();
 
-        $credentials = json_encode($this->model->findByUsername($login['username']));
+        $credentials = json_decode($this->model->findByUsername($login['username']));
 
         if($credentials)
         {
