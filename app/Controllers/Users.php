@@ -101,7 +101,7 @@ class Users extends ResourceController
         $model = model('App\Models\LoginModel', false);
 
         $credentials = $this->model->findByUsername($login['username']);
-        return $this->fail('Something went Wrong '.$credentials);
+        return ($credentials);
 
         if($credentials)
         {
