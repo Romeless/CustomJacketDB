@@ -91,6 +91,19 @@ class Users extends ResourceController
         return $this->fail('errors');
     }
 
+    public function getByUsername()
+    {
+        $data = $this->request->getPost();
+        $username = $data['username'];
+
+        if($cred = $this->model->findByUserName($username))
+        {
+            return $cred;
+        }
+        
+        return $this->fail('errors');
+    }
+
     public function login()
     {
 
