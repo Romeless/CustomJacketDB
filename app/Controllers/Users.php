@@ -101,6 +101,7 @@ class Users extends ResourceController
         $model = model('App\Models\LoginModel', false);
 
         $credentials = $model->findByUsername($login['username']);
+        echo($credentials);
 
         if($credentials)
         {
