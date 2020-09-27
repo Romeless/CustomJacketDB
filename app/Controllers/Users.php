@@ -112,6 +112,7 @@ class Users extends ResourceController
 
             if (!password_verify($login['password'], $credentials['password']))
             {
+                dd($login['password'], $credentials['password']);
                 return $this->fail('Wrong Password '.$login['password']);
             }
 
