@@ -148,7 +148,7 @@ class Users extends ResourceController
 
     public function refreshToken($credentials, $token, $device)
     {
-        $model = model('App\Models\TokenModel');
+        $model = model('App\Models\TokensModel');
         
         $token_cred = [];
         
