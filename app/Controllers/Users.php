@@ -98,7 +98,7 @@ class Users extends ResourceController
 
         if($cred = $this->model->findByUserName($username))
         {
-            return $cred;
+            return $this->respond($cred);
         }
         
         return $this->fail('errors');
@@ -110,11 +110,8 @@ class Users extends ResourceController
         $login = $this->request->getPost();
         $validate = $this->validation->run($login, 'login');
         $errors = $this->validation->getErrors();
-        
-        $model = model('App\Models\LoginModel', false);
 
-        $credentials = $this->model->findByUsername($login['username']);
-        return ($credentials);
+        $credentials = json_encode($this->model->findByUsername($login['username']));
 
         if($credentials)
         {

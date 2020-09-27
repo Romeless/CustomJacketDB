@@ -10,10 +10,9 @@ class LoginModel extends Model
     protected $primaryKey = 'username';
     
     protected $allowedFields = [
-        'username', 'password', 'salt',
+        'password', 'salt',
     ];
 
-    protected $returnType = 'array';
     protected $useTimestamps = false;
 
 

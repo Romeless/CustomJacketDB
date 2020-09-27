@@ -12,7 +12,7 @@ class UsersModel extends Model
     protected $allowedFields = [
         'username', 'fullName', 'email', 'address', 'phoneNumber', 'joinDate',
     ];
-    protected $returnType = 'App/Entities/Users';
+    protected $returnType = 'App\Entities\Users';
     protected $useTimestamps = false;
     
 
@@ -44,7 +44,7 @@ class UsersModel extends Model
         
         if($result = $this->db->query($sql, [$username]))
         {
-            return $result->getResult();
+            return $result->getResultArray();
         } 
     }
 }
