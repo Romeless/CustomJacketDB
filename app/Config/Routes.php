@@ -38,6 +38,7 @@ $routes->add('/todo/api/0.1/users/create', 'Users::create');
 $routes->add('/todo/api/0.1/users/update', 'Users::update');
 $routes->add('/todo/api/0.1/users/show', 'Users::show');
 $routes->add('/todo/api/0.1/users/login', 'Users::login');
+$routes->add('/todo/api/0.1/users/username', 'Users::getByUsername');
 $routes->add('/todo/api/0.1/users/generateToken', 'Users::generateToken');
 
 $routes->add('/todo/api/0.1/designs', 'Designs::index');
