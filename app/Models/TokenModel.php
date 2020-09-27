@@ -37,4 +37,14 @@ class TokenModel extends Model
             return $result->getResultArray();
         } 
     }
+
+    public function findByUserIDAndDevice($userID, $device)
+    {
+        $sql = "SELECT * FROM tokens WHERE userID = ? and device = ?";
+
+        if($result = $this->db->query($sql, [$userID, $device]))
+        {
+            return $result->getResultArray();
+        } 
+    }
 }

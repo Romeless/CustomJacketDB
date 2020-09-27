@@ -35,7 +35,7 @@ class Users extends ResourceController
 
         if($this->model->save($user))
         {
-            return $this->respondCreated($user, 'User Created');
+            return $this->respond($user);
         }
     }
 
@@ -117,6 +117,14 @@ class Users extends ResourceController
         $credentials = $this->model->findByUsername($login['username']);
         $credentials = $credentials[0];
 
+        if(isset($login['device']))
+        {
+            $device = $login['device'];
+        } else
+        {
+            $device = "n/a";
+        }
+
         if($credentials)
         {
             if ($login['username'] != $credentials['username'])
@@ -130,7 +138,7 @@ class Users extends ResourceController
             }
 
             $token = $this->generateToken();
-            $tokenStatus = $this->refreshToken($credentials, $token);
+            $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
             return $tokenStatus;
         }
@@ -138,20 +146,20 @@ class Users extends ResourceController
         return $this->fail('errors');
     }
 
-    public function refreshToken($credentials, $token)
+    public function refreshToken($credentials, $token, $device)
     {
         $model = model('App\Models\TokenModel');
         
         $token_cred = [];
         
-        if ($token_cred = $model->findByUserId($credentials['id']))
+        if ($token_cred = $model->findByUserIdAndDevice($credentials['id'], $device))
         {
             $token_cred = $token_cred[0];
-        } 
+        }
 
         $token_cred['token'] = $token['token'];
         $token_cred['userID'] = $credentials['id'];
-        $token_cred['device'] = 'IDUNNOLOL';
+        $token_cred['device'] = $device;
         $token_cred['createDate'] = date(DATE_FORMAT);
         $token_cred['expireDate'] = date(DATE_FORMAT);
 
