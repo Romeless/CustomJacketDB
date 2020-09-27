@@ -112,6 +112,7 @@ class Users extends ResourceController
         $errors = $this->validation->getErrors();
 
         $credentials = json_decode($this->model->findByUsername($login['username']), true);
+        return $credentials;
 
         if($credentials)
         {
@@ -125,7 +126,6 @@ class Users extends ResourceController
                 return $this->fail('Wrong Password '.$login['password']);
             }
 
-            return json_encode('Pass and Username Correct');
 
             return json_encode($this->generateToken());
 
