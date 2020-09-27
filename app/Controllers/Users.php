@@ -69,6 +69,9 @@ class Users extends ResourceController
 
     public function delete($id = null)
     {
+        $data = $this->request->getRawInput();
+        $data['id'] = $id;
+
         if(!$this->model->findById($id))
         {
             return $this->fail('id tidak ditemukan');
@@ -91,33 +94,71 @@ class Users extends ResourceController
         return $this->fail('errors');
     }
 
+    public function getByUsername()
+    {
+        $data = $this->request->getPost();
+        $username = $data['username'];
+
+        if($cred = $this->model->findByUserName($username))
+        {
+            return $this->respond($cred);
+        }
+        
+        return $this->fail('errors');
+    }
+
     public function login()
     {
 
         $login = $this->request->getPost();
         $validate = $this->validation->run($login, 'login');
         $errors = $this->validation->getErrors();
-        
-        $model = model('App\Models\LoginModel', false);
 
-        $credentials = $model->findByUsername($login['username']);
+        $credentials = $this->model->findByUsername($login['username']);
+        $credentials = $credentials[0];
 
         if($credentials)
         {
             if ($login['username'] != $credentials['username'])
             {
-                return $this->fail('something went wrong');
+                return $this->fail('Something went Wrong');
             }
 
             if (!password_verify($login['password'], $credentials['password']))
             {
-                return $this->fail('WrongPassword '.$login['password']);
+                return $this->fail('Wrong Password '.$login['password']);
             }
 
-            return json_encode($this->generateToken());
+            $token = $this->generateToken();
+            $tokenStatus = $this->refreshToken($credentials, $token);
+
+            return $tokenStatus;
         }
 
         return $this->fail('errors');
+    }
+
+    public function refreshToken($credentials, $token)
+    {
+        $model = model('App\Models\TokenModel');
+        
+        $token_cred = [];
+        
+        if ($token_cred = $model->findByUserId($credentials['id']))
+        {
+            $token_cred = $token_cred[0];
+        } 
+
+        $token_cred['token'] = $token['token'];
+        $token_cred['userID'] = $credentials['id'];
+        $token_cred['device'] = 'IDUNNOLOL';
+        $token_cred['createDate'] = date(DATE_FORMAT);
+        $token_cred['expireDate'] = date(DATE_FORMAT);
+
+        if ($model->save($token_cred))
+        {
+            return $this->respondUpdated($token_cred, 'Token Updated');
+        }
     }
 
     public function generateToken($length = 60)

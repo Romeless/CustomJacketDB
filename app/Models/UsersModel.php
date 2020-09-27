@@ -10,11 +10,22 @@ class UsersModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'username', 'fullName', 'password', 'salt', 'email', 'address', 'phoneNumber', 'joinDate',
+        'username', 'fullName', 'email', 'password', 'salt', 'address', 'phoneNumber', 'joinDate',
     ];
     protected $returnType = 'App\Entities\Users';
     protected $useTimestamps = false;
     
+
+    public function getLoginCredentialsById($id)
+    {
+        $sql = "SELECT username, password, salt FROM users WHERE id = ?";
+        
+        if($result = $this->db->query($sql, [$id]))
+        {
+            return $result->getResult();
+        } 
+    }
+
     public function findById($id)
     {
         $data = $this->find($id);
@@ -25,5 +36,15 @@ class UsersModel extends Model
         }
 
         return false;
+    }
+
+    public function findByUserName($username)
+    {
+        $sql = "SELECT * FROM users WHERE username = ?";
+        
+        if($result = $this->db->query($sql, [$username]))
+        {
+            return $result->getResultArray();
+        } 
     }
 }
