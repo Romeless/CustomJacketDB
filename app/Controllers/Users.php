@@ -120,6 +120,7 @@ class Users extends ResourceController
 
             if ($userID = $this->model->findByUserName($credentials['username'])[0]['id'])
             {
+                echo($userID);
                 $tokenData = new \App\Entities\Tokens();
                 $tokenData->token = $token;
                 $tokenData->userID = $userID;
