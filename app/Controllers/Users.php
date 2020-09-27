@@ -142,6 +142,8 @@ class Users extends ResourceController
     {
         $model = model('App\Models\TokenModel');
         
+        $token_cred = [];
+        
         if ($token_cred = $model->findByUserId($credentials['id']))
         {
             $token_cred = $token_cred[0];
