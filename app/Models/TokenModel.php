@@ -7,13 +7,13 @@ use CodeIgniter\Model;
 class TokenModel extends Model
 {
     protected $table = 'tokens';
-    protected $primaryKey = 'token';
+    protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'userID', 'device', 'createDate', 'expireDate'
+        'token', 'userID', 'device', 'createDate', 'expireDate'
     ];
 
-    protected $returnType = 'array';
+    protected $returnType = 'App\Entities\Tokens';
     protected $useTimestamps = false;
     
     public function findByToken($token)
@@ -34,7 +34,7 @@ class TokenModel extends Model
 
         if($result = $this->db->query($sql, [$userID]))
         {
-            return $result->getResult();
+            return $result->getResultArray();
         } 
     }
 }

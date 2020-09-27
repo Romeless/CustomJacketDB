@@ -71,7 +71,7 @@ class Users extends ResourceController
     {
         $data = $this->request->getRawInput();
         $data['id'] = $id;
-        
+
         if(!$this->model->findById($id))
         {
             return $this->fail('id tidak ditemukan');
@@ -129,12 +129,34 @@ class Users extends ResourceController
                 return $this->fail('Wrong Password '.$login['password']);
             }
 
+            $token = $this->generateToken();
+            $tokenStatus = $this->refreshToken($credentials, $token);
 
-            return json_encode($this->generateToken());
-
+            return $tokenStatus;
         }
 
         return $this->fail('errors');
+    }
+
+    public function refreshToken($credentials, $token)
+    {
+        $model = model('App\Models\TokenModel');
+        
+        if ($token_cred = $model->findByUserId($credentials['id']))
+        {
+            $token_cred = $token_cred[0];
+        } 
+
+        $token_cred['token'] = $token['token'];
+        $token_cred['userID'] = $credentials['id'];
+        $token_cred['device'] = 'IDUNNOLOL';
+        $token_cred['createDate'] = date(DATE_FORMAT);
+        $token_cred['expireDate'] = date(DATE_FORMAT);
+
+        if ($model->save($token_cred))
+        {
+            return $this->respondUpdated($token_cred, 'Token Updated');
+        }
     }
 
     public function generateToken($length = 60)
