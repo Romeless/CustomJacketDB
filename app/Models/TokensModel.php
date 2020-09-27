@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TokenModel extends Model
+class TokensModel extends Model
 {
     protected $table = 'tokens';
     protected $primaryKey = 'id';
