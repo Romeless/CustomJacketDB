@@ -10,7 +10,7 @@ class UsersModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'username', 'fullName', 'email', 'address', 'phoneNumber', 'joinDate',
+        'username', 'fullName', 'email', 'password', 'salt', 'address', 'phoneNumber', 'joinDate',
     ];
     protected $returnType = 'App\Entities\Users';
     protected $useTimestamps = false;
