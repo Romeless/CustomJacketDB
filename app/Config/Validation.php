@@ -65,7 +65,7 @@ class Validation
 		],
 	];
 
-	public $add_design = [
+	public $design_validation = [
 		'userID' => [
 			'rules' => 'required',
 		],
@@ -73,27 +73,6 @@ class Validation
 			'rules' => 'required',
 		],
 		'designType' => [
-			'rules' => 'required',
-		],
-		'filePath' => [
-			'rules' => 'required',
-		],
-		'detail' => [
-			'rules' => 'required',
-		],
-	];
-
-	public $update_design = [
-		'userID' => [
-			'rules' => 'required',
-		],
-		'designName' => [
-			'rules' => 'required',
-		],
-		'designType' => [
-			'rules' => 'required',
-		],
-		'filePath' => [
 			'rules' => 'required',
 		],
 		'detail' => [
