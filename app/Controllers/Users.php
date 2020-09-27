@@ -112,35 +112,10 @@ class Users extends ResourceController
 
             if (!password_verify($login['password'], $credentials['password']))
             {
-                dd($login['password'], $credentials['password']);
                 return $this->fail('Wrong Password '.$login['password']);
             }
 
-
-
-            $token_model = model('App\Models\TokenModel', false);
-
-            $token = json_encode($this->generateToken());
-
-            if ($userID = $this->model->findByUserName($credentials['username'])[0]['id'])
-            {
-                echo($userID);
-                $tokenData = new \App\Entities\Tokens();
-                $tokenData->token = $token;
-                $tokenData->userID = $userID;
-                $tokenData->device = 'IMPLEMENTATION';
-                $tokenData->createDate = date(DATE_FORMAT);
-                $tokenData->expireDate = date(DATE_FORMAT)->modify('+365 days')->format(DATE_FORMAT);
-
-
-                if($token_model->save($tokenData))
-                {
-                    return $token;
-                }
-            } else {
-                return $this->fail('Username not found');
-            }
-
+            return json_encode($this->generateToken());
 
         }
 
