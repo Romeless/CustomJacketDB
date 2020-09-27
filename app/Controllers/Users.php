@@ -100,8 +100,8 @@ class Users extends ResourceController
         
         $model = model('App\Models\LoginModel', false);
 
-        $credentials = $model->findByUsername($login['username']);
-        return ($credentials);
+        $credentials = $this->model->findByUsername($login['username']);
+        return $this->fail('Something went Wrong '.$credentials);
 
         if($credentials)
         {
@@ -113,7 +113,7 @@ class Users extends ResourceController
 
             if (!password_verify($login['password'], $credentials['password']))
             {
-                return $this->fail('Wrong Password '.$credentials['password']);
+                return $this->fail('Wrong Password '.$credentials);
             }
 
             return json_encode($this->generateToken());
