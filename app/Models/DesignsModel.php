@@ -12,7 +12,7 @@ class DesignsModel extends Model
         'userID', 'designName', 'designType', 'images', 'detail', 'createDate', 'updateDate',
     ];
 
-    protected $returnType = 'App\Entities\Designs';
+    protected $returnType = 'array';
     protected $useTimestamps = false;
 
     public function findById($id)
@@ -25,5 +25,15 @@ class DesignsModel extends Model
         }
 
         return false;
+    }
+
+    public function findByUserID($userID)
+    {
+        $sql = "SELECT * FROM designs WHERE userID = ?";
+
+        if($result = $this->db->query($sql, [$userID]))
+        {
+            return $result->getResultArray();
+        } 
     }
 }

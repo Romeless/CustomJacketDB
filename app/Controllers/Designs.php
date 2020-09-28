@@ -91,4 +91,16 @@ class Designs extends ResourceController
 
         return $this->fail('errors');
     }
+
+    public function showByUserID($userID)
+    {
+        $data = $this->model->findByUserID($userID);
+
+        if($data)
+        {
+            return $this->respond($data);
+        }
+
+        return $this->fail('errors');
+    }
 }

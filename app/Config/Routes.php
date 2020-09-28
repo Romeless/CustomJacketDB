@@ -36,14 +36,16 @@ $routes->get('/Token', 'Token::index');
 $routes->add('/todo/api/0.1/users', 'Users::index');
 $routes->add('/todo/api/0.1/users/create', 'Users::create');
 $routes->add('/todo/api/0.1/users/update', 'Users::update');
-$routes->add('/todo/api/0.1/users/show', 'Users::show');
+$routes->add('/todo/api/0.1/users/show/(:num)', 'Users::show/$1');
 $routes->add('/todo/api/0.1/users/login', 'Users::login');
 $routes->add('/todo/api/0.1/users/username', 'Users::getByUsername');
 
 $routes->add('/todo/api/0.1/designs', 'Designs::index');
 $routes->add('/todo/api/0.1/designs/create', 'Designs::create');
 $routes->add('/todo/api/0.1/designs/update', 'Designs::update');
-$routes->add('/todo/api/0.1/designs/show', 'Designs::show');
+$routes->add('/todo/api/0.1/designs/show/(:num)', 'Designs::show/$1');
+$routes->add('/todo/api/0.1/designs/user/(:num)', 'Designs::showByUserID/$1');
+
 
 /**
  * --------------------------------------------------------------------
