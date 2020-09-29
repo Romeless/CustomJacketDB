@@ -36,4 +36,48 @@ class DesignsModel extends Model
             return $result->getResultArray();
         } 
     }
+
+    function findByColumn($columns, $values, $result = null)
+    {
+        // $columns is an array of string specifiyng the column to search (ex. username, password)
+        // $values is an array of string related to the column of same index (ex. 15, means WHERE username = 15)
+
+        if (sizeof($columns) != sizeof($values))
+        {
+            return 0;
+        }
+
+        if ($result == null)
+        {
+            $sql = "SELECT ".$result." ";
+        } else {
+            $sql = "SELECT ";
+            foreach($result as $rescol => $element)
+            {
+                if ($rescol === array_key_last($result))
+                {
+                    $sql = $sql.$element." ";
+                } else {
+                    $sql = $sql.$element.",";
+                }
+            }
+        }
+
+        $sql = $sql."FROM designs WHERE ";
+        
+        foreach($columns as $column => $element)
+        {
+            $sql = $sql.$element." = ?";
+
+            if ($column != array_key_last($columns))
+            {
+                $sql = $sql." AND ";
+            }
+        }
+        
+        if($result = $this->db->query($sql, $values))
+        {
+            return $result->getResultArray();
+        } 
+    }
 }

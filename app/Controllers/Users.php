@@ -13,6 +13,8 @@ class Users extends ResourceController
         $this->validation = \Config\Services::validation();
     }
 
+    // JANGAN LUPA UPDATE VALIDATION SESUAI GOOGLE JUGA
+
     public function index()
     {
         return $this->respond($this->model->findAll());
