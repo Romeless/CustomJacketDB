@@ -1,4 +1,6 @@
-<?php namespace Config;
+<?php
+
+namespace Config;
 
 class Validation
 {
@@ -34,7 +36,7 @@ class Validation
 	// Rules
 	//--------------------------------------------------------------------
 
-	
+
 	public $register = [
 		'username' => [
 			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username]',
@@ -72,10 +74,8 @@ class Validation
 		'designName' => [
 			'rules' => 'required',
 		],
-		'designType' => [
-			'rules' => 'required',
-		],
-		'detail' => [
+
+		'details' => [
 			'rules' => 'required',
 		],
 	];

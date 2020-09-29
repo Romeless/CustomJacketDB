@@ -9,7 +9,7 @@ class DesignsModel extends Model
     protected $table = 'designs';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'userID', 'designName', 'designType', 'images', 'detail', 'createDate', 'updateDate',
+        'userID', 'designName', 'detail', 'images', 'imagesPosition', 'information', "createDate", "updateDate"
     ];
 
     protected $returnType = 'array';
@@ -19,8 +19,7 @@ class DesignsModel extends Model
     {
         $data = $this->find($id);
 
-        if($data)
-        {
+        if ($data) {
             return $data;
         }
 
@@ -31,10 +30,9 @@ class DesignsModel extends Model
     {
         $sql = "SELECT * FROM designs WHERE userID = ?";
 
-        if($result = $this->db->query($sql, [$userID]))
-        {
+        if ($result = $this->db->query($sql, [$userID])) {
             return $result->getResultArray();
-        } 
+        }
     }
 
     function findByColumn($columns, $values, $result = null)
@@ -42,42 +40,35 @@ class DesignsModel extends Model
         // $columns is an array of string specifiyng the column to search (ex. username, password)
         // $values is an array of string related to the column of same index (ex. 15, means WHERE username = 15)
 
-        if (sizeof($columns) != sizeof($values))
-        {
+        if (sizeof($columns) != sizeof($values)) {
             return 0;
         }
 
-        if ($result == null)
-        {
-            $sql = "SELECT ".$result." ";
+        if ($result == null) {
+            $sql = "SELECT " . $result . " ";
         } else {
             $sql = "SELECT ";
-            foreach($result as $rescol => $element)
-            {
-                if ($rescol === array_key_last($result))
-                {
-                    $sql = $sql.$element." ";
+            foreach ($result as $rescol => $element) {
+                if ($rescol === array_key_last($result)) {
+                    $sql = $sql . $element . " ";
                 } else {
-                    $sql = $sql.$element.",";
+                    $sql = $sql . $element . ",";
                 }
             }
         }
 
-        $sql = $sql."FROM designs WHERE ";
-        
-        foreach($columns as $column => $element)
-        {
-            $sql = $sql.$element." = ?";
+        $sql = $sql . "FROM designs WHERE ";
 
-            if ($column != array_key_last($columns))
-            {
-                $sql = $sql." AND ";
+        foreach ($columns as $column => $element) {
+            $sql = $sql . $element . " = ?";
+
+            if ($column != array_key_last($columns)) {
+                $sql = $sql . " AND ";
             }
         }
-        
-        if($result = $this->db->query($sql, $values))
-        {
+
+        if ($result = $this->db->query($sql, $values)) {
             return $result->getResultArray();
-        } 
+        }
     }
 }
