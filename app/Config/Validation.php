@@ -54,7 +54,7 @@ class Validation
 
 	public $google_auth = [
 		'tokenID' => [
-			'rules' => 'required|is_unique[users.tokenID]'
+			'rules' => 'required'
 		],
 		'fullName' => [
 			'rules' => 'required',
