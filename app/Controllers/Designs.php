@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class Designs extends ResourceController
 {
@@ -11,18 +13,29 @@ class Designs extends ResourceController
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
+        $this->log = new Logger('designs');
+        $this->log->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
     }
 
     public function index()
     {
+        $this->log->addWarning('run designs/index');
         return $this->respond($this->model->findAll());
     }
 
     public function create()
     {
+        $this->log->addWarning('run designs/create');
+
         $data = $this->request->getPost();
-        $data = json_decode($data, true);
-        $validate = $this->validation->run($data, 'design_validation');
+        
+        $this->log->addWarning($data);
+
+        $design = json_decode($data, true);
+
+        $this->log->addWarning($design);
+
+        $validate = $this->validation->run($design, 'design_validation');
         $errors = $this->validation->getErrors();
 
         if($errors)
@@ -30,8 +43,6 @@ class Designs extends ResourceController
             return $this->fail($errors);
         }
 
-        $design = new \App\Entities\Designs();
-        $design->fill($data);
         $design->createDate = date(DATE_FORMAT);
         $design->updateDate = date(DATE_FORMAT);
 

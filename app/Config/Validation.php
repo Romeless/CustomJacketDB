@@ -74,7 +74,6 @@ class Validation
 		'designName' => [
 			'rules' => 'required',
 		],
-
 		'details' => [
 			'rules' => 'required',
 		],
