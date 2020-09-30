@@ -21,6 +21,8 @@ class Designs extends ResourceController
     public function create()
     {
         $data = $this->request->getPost();
+        return $this->respondCreated($data);
+        
         $validate = $this->validation->run($data, 'design_validation');
         $errors = $this->validation->getErrors();
 
