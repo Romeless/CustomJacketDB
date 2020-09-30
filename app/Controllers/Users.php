@@ -78,7 +78,10 @@ class Users extends ResourceController
 
             if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
             {
+                file_put_contents("php://stderr", print_r($user, true));
+
                 $user = $user[0];
+                
                 $response = $this->auth($user);
 
                 file_put_contents("php://stderr", print_r($response, true));
@@ -107,6 +110,7 @@ class Users extends ResourceController
 
         } else {
             file_put_contents("php://stderr", print_r($payload, true));
+
             return $this->fail("Token ID Authentication Fails");
         }
     }
