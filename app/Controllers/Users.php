@@ -46,6 +46,8 @@ class Users extends ResourceController
 
         $data = $this->request->getRawInput();
         $data['id'] = $id;
+
+        error_log(print_r($data));
         $validate = $this->validation->run($data, 'update_user');
         $errors = $this->validation->getErrors();
 

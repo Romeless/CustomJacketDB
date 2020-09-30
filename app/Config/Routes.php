@@ -35,7 +35,7 @@ $routes->get('/Token', 'Token::index');
 
 $routes->add('/todo/api/0.1/users', 'Users::index');
 $routes->add('/todo/api/0.1/users/create', 'Users::create');
-$routes->add('/todo/api/0.1/users/update', 'Users::update');
+$routes->add('/todo/api/0.1/users/update/(:num)', 'Users::update/$1');
 $routes->add('/todo/api/0.1/users/show/(:num)', 'Users::show/$1');
 $routes->add('/todo/api/0.1/users/login', 'Users::login');
 $routes->add('/todo/api/0.1/users/username', 'Users::getByUsername');
