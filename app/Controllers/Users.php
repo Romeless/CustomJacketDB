@@ -43,9 +43,9 @@ class Users extends ResourceController
 
     public function google_auth()
     {
-        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: https://hudie-custom.herokuapp.com/");
         header("Access-Control-Allow-Credentials: true");
-        
+
         $data = $this->request->getPost();
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
