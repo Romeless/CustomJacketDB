@@ -43,7 +43,7 @@ class Users extends ResourceController
 
     public function google_auth()
     {
-        header("Access-control-Allow-origin");
+        header("Access-Control-Allow-Origin: *");
         
         $data = $this->request->getPost();
         $validate = $this->validation->run($data, 'google_auth');
