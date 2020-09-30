@@ -28,7 +28,7 @@ class Designs extends ResourceController
         $data = $this->request->getPost();
         
         error_log("DATA: ");
-        file_put_contents("post.log", print_r($_POST, true));
+        file_put_contents("php://stderr", print_r($_POST, true));
 
         $design = json_decode($data, true);
 
