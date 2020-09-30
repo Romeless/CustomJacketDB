@@ -81,6 +81,8 @@ class Users extends ResourceController
                 $user = $user[0];
                 $response = $this->auth($user);
 
+                file_put_contents("php://stderr", print_r($response, true));
+
                 return $this->respond($response, "Account Login");
             }
 
@@ -97,6 +99,8 @@ class Users extends ResourceController
             if($this->model->save($user))
             {
                 $response = $this->auth($user);
+
+                file_put_contents("php://stderr", print_r($response, true));
 
                 return $this->respond($response, "Account Created");
             }
