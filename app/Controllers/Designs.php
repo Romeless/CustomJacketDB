@@ -27,13 +27,9 @@ class Designs extends ResourceController
 
         $data = $this->request->getPost();
         
-        error_log("DATA: ");
-        file_put_contents("php://stderr", print_r($_POST, true));
-
-        $design = json_decode($data, true);
-
-        error_log("Designs: ");
-        error_log(print_r($design));
+        error_log("Data: ");
+        file_put_contents("php://stderr", print_r($data, true));
+        file_put_contents("php://stderr", print_r($data['userID'], true));
 
         $validate = $this->validation->run($design, 'design_validation');
         $errors = $this->validation->getErrors();
