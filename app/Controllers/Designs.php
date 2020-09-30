@@ -33,19 +33,22 @@ class Designs extends ResourceController
         $validate = $this->validation->run($data, 'design_validation');
         $errors = $this->validation->getErrors();
 
+        file_put_contents("php://stderr", print_r($validate, true));
+        file_put_contents("php://stderr", print_r($errors, true));
+
         if($errors)
         {
             return $this->fail($errors);
         }
 
-        $data->createDate = date(DATE_FORMAT);
-        $data->updateDate = date(DATE_FORMAT);
+        $data['createDate'] = date(DATE_FORMAT);
+        $data['updateDate'] = date(DATE_FORMAT);
 
         file_put_contents("php://stderr", print_r($data, true));
 
-        if($this->model->save($design))
+        if($this->model->save($data))
         {
-            return $this->respondCreated($design, 'Design Created');
+            return $this->respondCreated($data, 'Design Created');
         }
     }
 
