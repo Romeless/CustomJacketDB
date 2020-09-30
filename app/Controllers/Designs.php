@@ -27,10 +27,12 @@ class Designs extends ResourceController
 
         $data = $this->request->getPost();
         
+        error_log("DATA: ");
         error_log($data);
 
         $design = json_decode($data, true);
 
+        error_log("Designs: ");
         error_log($design);
 
         $validate = $this->validation->run($design, 'design_validation');
