@@ -43,7 +43,7 @@ class Users extends ResourceController
 
     public function google_auth()
     {
-        header("Access-Control-Allow-Origin: https://hudie-custom.herokuapp.com/");
+        header("Access-Control-Allow-Origin: https://hudie-custom.herokuapp.com");
         header("Access-Control-Allow-Credentials: true");
 
         $data = $this->request->getPost();
