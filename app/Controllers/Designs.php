@@ -13,8 +13,6 @@ class Designs extends ResourceController
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
-        // $this->log = new Logger('designs');
-        // $this->log->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
     }
 
     public function index()
@@ -25,15 +23,15 @@ class Designs extends ResourceController
 
     public function create()
     {
-        $this->log->addWarning('run designs/create');
+        error_log("design create");
 
         $data = $this->request->getPost();
         
-        $this->log->addWarning($data);
+        error_log($data);
 
         $design = json_decode($data, true);
 
-        $this->log->addWarning($design);
+        error_log($design);
 
         $validate = $this->validation->run($design, 'design_validation');
         $errors = $this->validation->getErrors();
