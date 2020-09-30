@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
-header("Access-control-Allow-origin");
 
 class Users extends ResourceController
 {
@@ -44,6 +43,8 @@ class Users extends ResourceController
 
     public function google_auth()
     {
+        header("Access-control-Allow-origin");
+        
         $data = $this->request->getPost();
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
