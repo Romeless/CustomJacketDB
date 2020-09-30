@@ -189,7 +189,7 @@ class Users extends ResourceController
 
         $response = $this->auth($login);
 
-        return $this->respond($response);
+        return $response;
     }
 
     private function auth($data)
@@ -233,7 +233,7 @@ class Users extends ResourceController
             $token = $this->generateToken();
             $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
-            return $tokenStatus;
+            return $this->respondUpdated($tokenStatus, "TOKEN UPDATED");
         }
 
         return "ERROR CREDENTIALS WRONG";
@@ -258,7 +258,7 @@ class Users extends ResourceController
 
         if ($model->save($token_cred))
         {
-            return $this->respondUpdated($token_cred, 'Token Updated');
+            return $token_cred;
         }
     }
 
