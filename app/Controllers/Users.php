@@ -102,7 +102,7 @@ class Users extends ResourceController
             }
 
         } else {
-            //file_put_contents("php://stderr", print_r($payload));
+            file_put_contents("php://stderr", print_r($payload, true));
             return $this->fail("Token ID Authentication Fails");
         }
     }
@@ -113,7 +113,7 @@ class Users extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        //file_put_contents("php://stderr", print_r($data));
+        file_put_contents("php://stderr", print_r($data, true));
         $validate = $this->validation->run($data, 'update_user');
         $errors = $this->validation->getErrors();
 
@@ -191,7 +191,7 @@ class Users extends ResourceController
 
         $response = $this->auth($login);
 
-        //file_put_contents("php://stderr", print_r("LOGIN LOG: ".$response, true));
+        file_put_contents("php://stderr", print_r("LOGIN LOG: ".$response, true));
 
         return $this->respond($response);
     }
@@ -202,14 +202,14 @@ class Users extends ResourceController
         // -> id
         // -> username
 
-        //file_put_contents("php://stderr", print_r($data, true));
+        file_put_contents("php://stderr", print_r($data, true));
 
         if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
         {
             $credentials = $credentials[0];
         } else
         {
-            //file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']])));
+            file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
             return "ERROR USERNAME NOT FOUND";
         }
         
@@ -237,7 +237,7 @@ class Users extends ResourceController
             $token = $this->generateToken();
             $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
-            //file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
+            file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
 
             return $tokenStatus;
         }
@@ -264,7 +264,7 @@ class Users extends ResourceController
 
         if ($model->save($token_cred))
         {
-            //file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
+            file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
             return $token_cred;
         }
     }
