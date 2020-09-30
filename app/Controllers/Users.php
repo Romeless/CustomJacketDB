@@ -235,7 +235,7 @@ class Users extends ResourceController
             $token = $this->generateToken();
             $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
-            file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus));
+            file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
 
             return $tokenStatus;
         }
@@ -262,7 +262,7 @@ class Users extends ResourceController
 
         if ($model->save($token_cred))
         {
-            file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred));
+            file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
             return $token_cred;
         }
     }
