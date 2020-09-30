@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
+header("Access-control-Allow-origin");
 
 class Users extends ResourceController
 {
@@ -86,6 +87,7 @@ class Users extends ResourceController
             {
                 return $this->respond($user);
             }
+
         } else {
             error_log(print_r($payload));
             return $this->fail("Token ID Authentication Fails");
