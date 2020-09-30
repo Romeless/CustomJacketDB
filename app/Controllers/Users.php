@@ -81,7 +81,7 @@ class Users extends ResourceController
                 $user = $user[0];
                 $response = $this->auth($user);
 
-                return $this->respond($response);
+                return $this->respond($response, "Account Login");
             }
 
             $userid = $payload['sub'];
@@ -98,7 +98,7 @@ class Users extends ResourceController
             {
                 $response = $this->auth($user);
 
-                return $this->respond($response);
+                return $this->respond($response, "Account Created");
             }
 
         } else {
