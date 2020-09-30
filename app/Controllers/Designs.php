@@ -13,13 +13,13 @@ class Designs extends ResourceController
     public function __construct()
     {
         $this->validation = \Config\Services::validation();
-        $this->log = new Logger('designs');
-        $this->log->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
+        // $this->log = new Logger('designs');
+        // $this->log->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
     }
 
     public function index()
     {
-        $this->log->warning('run designs/index');
+        error_log("design index");
         return $this->respond($this->model->findAll());
     }
 
