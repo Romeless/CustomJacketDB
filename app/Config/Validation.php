@@ -52,6 +52,18 @@ class Validation
 		],
 	];
 
+	public $google_auth = [
+		'tokenID' => [
+			'rules' => 'required|is_unique[users.tokenID]'
+		],
+		'fullName' => [
+			'rules' => 'required',
+		],
+		'email' => [
+			'rules' => 'required',
+		],
+	];
+
 	public $update_user = [
 		'username' => [
 			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username,id,{id}]',

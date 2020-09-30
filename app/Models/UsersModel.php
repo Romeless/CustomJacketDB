@@ -46,7 +46,7 @@ class UsersModel extends Model
         }
 
         if ($result == null) {
-            $sql = "SELECT " . $result . " ";
+            $sql = "SELECT * ";
         } else {
             $sql = "SELECT ";
             foreach ($result as $rescol => $element) {
@@ -67,9 +67,15 @@ class UsersModel extends Model
                 $sql = $sql . " AND ";
             }
         }
-
-        if ($result = $this->db->query($sql, $values)) {
-            return $result->getResultArray();
+        
+        try {
+            if ($result = $this->db->query($sql, $values)) {
+                return $result->getResultArray();
+            }
+        } catch (Exception $e)
+        {
+            error_log(print_r($sql));
+            return($sql);
         }
     }
 

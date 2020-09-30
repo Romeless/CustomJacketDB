@@ -41,6 +41,57 @@ class Users extends ResourceController
         }
     }
 
+    public function google_auth()
+    {
+        $data = $this->request->getPost();
+        $validate = $this->validation->run($data, 'google_auth');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        // require_once ROOTPATH . 'vendor/autoload.php';
+
+        $id_token = $data['tokenID'];
+
+        // $client = new Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
+        // $payload = $client->verifyIdToken($id_token);
+
+        $payload = [];
+        $payload['sub'] = $data['googleID'];
+        
+        if ($payload) {
+
+            if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
+            {
+                $user = $user[0];
+                $response = $this->auth($user);
+
+                return $this->respond($response);
+            }
+
+            $userid = $payload['sub'];
+            
+            $user = new \App\Entities\Users();
+            $user->fill($data);
+
+            $email_parts = explode('@', $data['email']);
+
+            $user->username = $email_parts[0].$userid;
+            $user->joinDate = date(DATE_FORMAT);
+
+            if($this->model->save($user))
+            {
+                return $this->respond($user);
+            }
+        } else {
+            error_log(print_r($payload));
+            return $this->fail("Token ID Authentication Fails");
+        }
+    }
+
     public function update($id = null)
     {
 
@@ -118,12 +169,37 @@ class Users extends ResourceController
         $validate = $this->validation->run($login, 'login');
         $errors = $this->validation->getErrors();
 
-        $credentials = $this->model->findByUsername($login['username']);
-        $credentials = $credentials[0];
-
-        if(isset($login['device']))
+        if ($error)
         {
-            $device = $login['device'];
+            return $this->fail($errors);
+        }
+
+        $response = $this->auth($login);
+
+        return $this->respond($response);
+    }
+
+    private function auth($data)
+    {
+        // $data
+        // -> id
+        // -> username
+
+        error_log(print_r($data));
+
+        if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
+        {
+            $credentials = $credentials[0];
+        } else
+        {
+            error_log(print_r($this->model->findByColumn(['username'], [$data['username']])));
+            return "ERROR USERNAME NOT FOUND";
+        }
+        
+
+        if(isset($data['device']))
+        {
+            $device = $data['device'];
         } else
         {
             $device = "n/a";
@@ -131,14 +207,14 @@ class Users extends ResourceController
 
         if($credentials)
         {
-            if ($login['username'] != $credentials['username'])
+            if ($data['username'] != $credentials['username'])
             {
                 return $this->fail('Something went Wrong');
             }
 
-            if (!password_verify($login['password'], $credentials['password']))
+            if (!password_verify($data['password'], $credentials['password']))
             {
-                return $this->fail('Wrong Password '.$login['password']);
+                return $this->fail('Wrong Password '.$data['password']);
             }
 
             $token = $this->generateToken();
@@ -147,10 +223,10 @@ class Users extends ResourceController
             return $tokenStatus;
         }
 
-        return $this->fail('errors');
+        return "ERROR CREDENTIALS WRONG";
     }
 
-    public function refreshToken($credentials, $token, $device)
+    private function refreshToken($credentials, $token, $device)
     {
         $model = model('App\Models\TokensModel');
         
@@ -173,7 +249,7 @@ class Users extends ResourceController
         }
     }
 
-    public function generateToken($length = 60)
+    private function generateToken($length = 60)
     {
         return ['token' => bin2hex(random_bytes($length))];
     }
