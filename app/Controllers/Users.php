@@ -45,13 +45,13 @@ class Users extends ResourceController
     {
         $http_origin = $_SERVER['HTTP_ORIGIN'];
 
-        if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
-        {  
-            header("Access-Control-Allow-Origin: $http_origin");
-        } else 
-        {
-            file_put_contents("php://stderr", print_r($http_origin, true));
-        }
+        // if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
+        // {  
+        //     header("Access-Control-Allow-Origin: $http_origin");
+        // } else 
+        // {
+        //     file_put_contents("php://stderr", print_r($http_origin, true));
+        // }
 
         header("Access-Control-Allow-Credentials: true");
 
@@ -96,7 +96,9 @@ class Users extends ResourceController
 
             if($this->model->save($user))
             {
-                return $this->respond($user);
+                $response = $this->auth($user);
+
+                return $this->respond($response);
             }
 
         } else {
