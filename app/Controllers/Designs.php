@@ -19,7 +19,7 @@ class Designs extends ResourceController
 
     public function index()
     {
-        $this->log->addWarning('run designs/index');
+        $this->log->warning('run designs/index');
         return $this->respond($this->model->findAll());
     }
 
