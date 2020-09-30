@@ -56,9 +56,6 @@ class Validation
 		'username' => [
 			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username,id,{id}]',
 		],
-		'password' => [
-			'rules' => 'required',
-		],
 		'fullName' => [
 			'rules' => 'required',
 		],
