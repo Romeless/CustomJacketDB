@@ -50,7 +50,7 @@ class Users extends ResourceController
             header("Access-Control-Allow-Origin: " . $http_origin);
         } else 
         {
-            file_put_contents("php://stderr", print_r($http_origin, true));
+            // file_put_contents("php://stderr", print_r($http_origin, true));
         }
 
         header("Access-Control-Allow-Credentials: true");
@@ -78,13 +78,13 @@ class Users extends ResourceController
 
             if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
             {
-                file_put_contents("php://stderr", print_r($user, true));
+                // file_put_contents("php://stderr", print_r($user, true));
 
                 $user = $user[0];
                 
                 $response = $this->auth($user);
 
-                file_put_contents("php://stderr", print_r($response, true));
+                // file_put_contents("php://stderr", print_r($response, true));
 
                 return $this->respond($response, "Account Login");
             }
@@ -103,13 +103,13 @@ class Users extends ResourceController
             {
                 $response = $this->auth($user);
 
-                file_put_contents("php://stderr", print_r($response, true));
+                // file_put_contents("php://stderr", print_r($response, true));
 
                 return $this->respondCreated($response, "Account Created");
             }
 
         } else {
-            file_put_contents("php://stderr", print_r($payload, true));
+            // file_put_contents("php://stderr", print_r($payload, true));
 
             return $this->fail("Token ID Authentication Fails");
         }
@@ -121,7 +121,7 @@ class Users extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        file_put_contents("php://stderr", print_r($data, true));
+        // file_put_contents("php://stderr", print_r($data, true));
         $validate = $this->validation->run($data, 'update_user');
         $errors = $this->validation->getErrors();
 
@@ -199,7 +199,7 @@ class Users extends ResourceController
 
         $response = $this->auth($login);
 
-        file_put_contents("php://stderr", print_r("LOGIN LOG: ".$response, true));
+        // file_put_contents("php://stderr", print_r("LOGIN LOG: ".$response, true));
 
         return $this->respond($response);
     }
@@ -210,14 +210,14 @@ class Users extends ResourceController
         // -> id
         // -> username
 
-        file_put_contents("php://stderr", print_r($data, true));
+        // file_put_contents("php://stderr", print_r($data, true));
 
         if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
         {
             $credentials = $credentials[0];
         } else
         {
-            file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
+            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
             return "ERROR USERNAME NOT FOUND";
         }
         
@@ -245,7 +245,7 @@ class Users extends ResourceController
             $token = $this->generateToken();
             $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
-            file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
+            // file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
 
             return $tokenStatus;
         }
@@ -272,7 +272,7 @@ class Users extends ResourceController
 
         if ($model->save($token_cred))
         {
-            file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
+            // file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
             return $token_cred;
         }
     }

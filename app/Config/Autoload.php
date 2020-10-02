@@ -63,6 +63,6 @@ class Autoload extends AutoloadConfig
 	 * @var array
 	 */
 	public $classmap = [
-		'Google_Client' => ROOTPATH . 'vendor/google/apiclient/src/Google/Client.php',
+		//'Google_Client' => ROOTPATH . 'vendor/google/apiclient/src/Google/Client.php',
 	];
 }
