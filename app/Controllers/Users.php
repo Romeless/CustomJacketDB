@@ -68,11 +68,11 @@ class Users extends ResourceController
 
         $id_token = $data['tokenID'];
 
-        $client = new \Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
-        $payload = $client->verifyIdToken($id_token);
+        //$client = new \Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
+        //$payload = $client->verifyIdToken($id_token);
 
-        // $payload = [];
-        // $payload['sub'] = $data['googleID'];
+        $payload = [];
+        $payload['sub'] = $data['googleID'];
         
         if ($payload) {
 
