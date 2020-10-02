@@ -67,6 +67,8 @@ class UsersModel extends Model
                 $sql = $sql . " AND ";
             }
         }
+
+        error_log(print_r($sql."\n"));
         
         try {
             if ($result = $this->db->query($sql, $values)) {

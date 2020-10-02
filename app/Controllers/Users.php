@@ -76,32 +76,39 @@ class Users extends ResourceController
         
         if ($payload) {
 
-            if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
+            $userid = $payload['sub'];
+
+            if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
                 // file_put_contents("php://stderr", print_r($user, true));
 
                 $user = $user[0];
                 
-                $response = $this->auth($user);
+                //error_log(print_r($user));
+                $response = $this->auth($user, TRUE);
+                error_log(print_r($response));
 
                 // file_put_contents("php://stderr", print_r($response, true));
 
-                return $this->respond($response, "Account Login");
+                return $this->respond($response);
             }
 
-            $userid = $payload['sub'];
-            
-            $user = new \App\Entities\Users();
-            $user->fill($data);
+            // error_log("CREATING NEW USER ".$data['email']);
+
+            // $user = new \App\Entities\Users();
+            // $user->fill($data);
 
             $email_parts = explode('@', $data['email']);
 
-            $user->username = $email_parts[0].$userid;
-            $user->joinDate = date(DATE_FORMAT);
+            $data['username'] = $email_parts[0].$userid;
+            $data['joinDate'] = date(DATE_FORMAT);
 
-            if($this->model->save($user))
+            //$array_user = ((array) $user);
+
+            if($this->model->save($data))
             {
-                $response = $this->auth($user);
+                
+                $response = $this->auth($data, true);
 
                 // file_put_contents("php://stderr", print_r($response, true));
 
@@ -204,7 +211,7 @@ class Users extends ResourceController
         return $this->respond($response);
     }
 
-    private function auth($data)
+    private function auth($data, $googleAuth = FALSE)
     {
         // $data
         // -> id
@@ -214,6 +221,7 @@ class Users extends ResourceController
 
         if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
         {
+            // error_log(print_r($credentials));
             $credentials = $credentials[0];
         } else
         {
@@ -224,13 +232,14 @@ class Users extends ResourceController
 
         if(isset($data['device']))
         {
+            // error_log(print_r($device));
             $device = $data['device'];
         } else
         {
             $device = "n/a";
         }
 
-        if($credentials)
+        if(!$googleAuth)
         {
             if ($data['username'] != $credentials['username'])
             {
@@ -241,16 +250,14 @@ class Users extends ResourceController
             {
                 return $this->fail('Wrong Password '.$data['password']);
             }
+        } 
 
-            $token = $this->generateToken();
-            $tokenStatus = $this->refreshToken($credentials, $token, $device);
+        $token = $this->generateToken();
+        $tokenStatus = $this->refreshToken($credentials, $token, $device);
 
-            // file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
+        // file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
 
-            return $tokenStatus;
-        }
-
-        return "ERROR CREDENTIALS WRONG";
+        return $tokenStatus;
     }
 
     private function refreshToken($credentials, $token, $device)
