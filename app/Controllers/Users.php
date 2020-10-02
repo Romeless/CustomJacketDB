@@ -86,7 +86,7 @@ class Users extends ResourceController
                 
                 //error_log(print_r($user));
                 $response = $this->auth($user, TRUE);
-                error_log(print_r($response));
+                //error_log(print_r($response));
 
                 // file_put_contents("php://stderr", print_r($response, true));
 
@@ -273,6 +273,7 @@ class Users extends ResourceController
 
         $token_cred['token'] = $token['token'];
         $token_cred['userID'] = $credentials['id'];
+        $token_cred['username'] = $credentials['username'];
         $token_cred['device'] = $device;
         $token_cred['createDate'] = date(DATE_FORMAT);
         $token_cred['expireDate'] = date(DATE_FORMAT);

@@ -68,7 +68,7 @@ class UsersModel extends Model
             }
         }
 
-        error_log(print_r($sql."\n"));
+        // error_log(print_r($sql."\n"));
         
         try {
             if ($result = $this->db->query($sql, $values)) {
