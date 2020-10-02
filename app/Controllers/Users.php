@@ -68,46 +68,45 @@ class Users extends ResourceController
 
         $id_token = $data['tokenID'];
 
-        // $client = new Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
-        // $payload = $client->verifyIdToken($id_token);
+        $client = new \Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
+        $payload = $client->verifyIdToken($id_token);
 
-        $payload = [];
-        $payload['sub'] = $data['googleID'];
+        // $payload = [];
+        // $payload['sub'] = $data['googleID'];
         
         if ($payload) {
 
-            return $this->respond("FUCK YOU");
-            // if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
-            // {
-            //     file_put_contents("php://stderr", print_r($user, true));
+            if($user = $this->model->findByColumn(["tokenID"], [$id_token]))
+            {
+                file_put_contents("php://stderr", print_r($user, true));
 
-            //     $user = $user[0];
+                $user = $user[0];
                 
-            //     $response = $this->auth($user);
+                $response = $this->auth($user);
 
-            //     file_put_contents("php://stderr", print_r($response, true));
+                file_put_contents("php://stderr", print_r($response, true));
 
-            //     return $this->respond($response, "Account Login");
-            // }
+                return $this->respond($response, "Account Login");
+            }
 
-            // $userid = $payload['sub'];
+            $userid = $payload['sub'];
             
-            // $user = new \App\Entities\Users();
-            // $user->fill($data);
+            $user = new \App\Entities\Users();
+            $user->fill($data);
 
-            // $email_parts = explode('@', $data['email']);
+            $email_parts = explode('@', $data['email']);
 
-            // $user->username = $email_parts[0].$userid;
-            // $user->joinDate = date(DATE_FORMAT);
+            $user->username = $email_parts[0].$userid;
+            $user->joinDate = date(DATE_FORMAT);
 
-            // if($this->model->save($user))
-            // {
-            //     $response = $this->auth($user);
+            if($this->model->save($user))
+            {
+                $response = $this->auth($user);
 
-            //     file_put_contents("php://stderr", print_r($response, true));
+                file_put_contents("php://stderr", print_r($response, true));
 
-            //     return $this->respondCreated($response, "Account Created");
-            // }
+                return $this->respondCreated($response, "Account Created");
+            }
 
         } else {
             file_put_contents("php://stderr", print_r($payload, true));
