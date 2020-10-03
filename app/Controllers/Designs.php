@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 
 class Designs extends ResourceController
 {
@@ -17,7 +15,6 @@ class Designs extends ResourceController
 
     public function index()
     {
-        error_log("design index");
         return $this->respond($this->model->findAllWithName());
     }
 

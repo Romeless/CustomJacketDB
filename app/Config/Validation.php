@@ -96,4 +96,25 @@ class Validation
 			'rules' => 'required',
 		],
 	];
+
+	public $order_validation = [
+		'userID' => [
+			'rules' => 'required',
+		],
+		'designID' => [
+			'rules' => 'required',
+		],
+		'address' => [
+			'rules' => 'required',
+		],
+		'qty' => [
+			'rules' => 'required',
+		],
+		'price' => [
+			'rules' => 'required',
+		],
+		'information' => [
+			'rules' => 'required',
+		],
+	];
 }

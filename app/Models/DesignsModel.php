@@ -17,7 +17,7 @@ class DesignsModel extends Model
 
     public function findAllWithName()
     {
-        $sql = "SELECT designs.id,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username FROM designs inner join users ON designs.userID = users.id";
+        $sql = "SELECT designs.id,designs.userID,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username FROM designs inner join users ON designs.userID = users.id";
 
         if ($result = $this->db->query($sql)) {
             return $result->getResultArray();

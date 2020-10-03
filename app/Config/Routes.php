@@ -47,7 +47,8 @@ $routes->add('/todo/api/0.1/designs/update', 'Designs::update');
 $routes->add('/todo/api/0.1/designs/show/(:num)', 'Designs::show/$1');
 $routes->add('/todo/api/0.1/designs/user/(:num)', 'Designs::showByUserID/$1');
 
-
+$routes->add('/todo/api/0.1/orders', 'Orders::index');
+$routes->add('/todo/api/0.1/orders/create', 'Orders::create');
 
 /**
  * --------------------------------------------------------------------
