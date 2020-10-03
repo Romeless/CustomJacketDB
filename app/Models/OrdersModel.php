@@ -25,4 +25,22 @@ class OrdersModel extends Model
 
         return false;
     }
+
+    public function findByUserID($userID)
+    {
+        $sql = "SELECT * FROM orders WHERE userID = ?";
+
+        if ($result = $this->db->query($sql, [$userID])) {
+            return $result->getResultArray();
+        }
+    }
+
+    public function findByDesignID($designID)
+    {
+        $sql = "SELECT * FROM orders WHERE designID = ?";
+
+        if ($result = $this->db->query($sql, [$designID])) {
+            return $result->getResultArray();
+        }
+    }
 }
