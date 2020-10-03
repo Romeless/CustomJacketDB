@@ -18,7 +18,7 @@ class Designs extends ResourceController
     public function index()
     {
         error_log("design index");
-        return $this->respond($this->model->findAll());
+        return $this->respond($this->model->findAllWithName());
     }
 
     public function create()
