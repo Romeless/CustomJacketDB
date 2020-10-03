@@ -12,7 +12,7 @@ class DesignsModel extends Model
         'userID', 'designName', 'details', 'images', 'imagesPosition', 'information', "createDate", "updateDate"
     ];
 
-    protected $returnType = 'App\Entities\Designs';
+    protected $returnType = 'array';
     protected $useTimestamps = false;
 
     public function findById($id)
