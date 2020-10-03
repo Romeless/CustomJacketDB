@@ -98,10 +98,6 @@ class Designs extends ResourceController
 
         if($data)
         {
-            $model = model('App\Models\UsersModel');
-            $userData = $model->findById($data['userID']);
-            $arrayUserData = json_decode(json_encode($userData), true);
-            $data['username'] = $arrayUserData['username'];
 
             return $this->respond($data);
         }

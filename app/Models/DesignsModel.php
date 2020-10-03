@@ -28,7 +28,7 @@ class DesignsModel extends Model
 
     public function findByUserID($userID)
     {
-        $sql = "SELECT * FROM designs inner join users ON designs.userID = users.id where userID = ?";
+        $sql = "SELECT designs.id,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username FROM designs inner join users ON designs.userID = users.id where userID = ?";
 
         if ($result = $this->db->query($sql, [$userID])) {
             return $result->getResultArray();
