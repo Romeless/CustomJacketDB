@@ -104,9 +104,6 @@ class Validation
 		'designID' => [
 			'rules' => 'required',
 		],
-		'address' => [
-			'rules' => 'required',
-		],
 		'qty' => [
 			'rules' => 'required',
 		],
