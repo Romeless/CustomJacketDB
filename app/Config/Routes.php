@@ -53,6 +53,7 @@ $routes->add('/todo/api/0.1/orders/update/(:num)', 'Orders::update/$1');
 $routes->add('/todo/api/0.1/orders/show/(:num)', 'Orders::show/$1');
 $routes->add('/todo/api/0.1/orders/user/(:num)', 'Orders::showByUserID/$1');
 $routes->add('/todo/api/0.1/orders/design/(:num)', 'Orders::showByDesignID/$1');
+$routes->add('/todo/api/0.1/orders/confirm', 'Orders::showOrderDetails');
 
 /**
  * --------------------------------------------------------------------

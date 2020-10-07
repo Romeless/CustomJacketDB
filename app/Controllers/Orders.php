@@ -126,4 +126,20 @@ class Orders extends ResourceController
 
         return $this->fail('errors');
     }
+
+    public function showOrderDetails()
+    {
+        $post = $this->request->getPost();
+        $userID = $post['userID'];
+        $designID = $post['designID'];
+        
+        $data = $this->model->findOrderDetails($userID, $designID);
+
+        if($data)
+        {
+            return $this->respond($data);
+        }
+
+        return $this->fail('errors');
+    }
 }
