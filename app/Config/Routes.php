@@ -44,12 +44,14 @@ $routes->add('/todo/api/0.1/users/user', 'Users::getByUsername');
 $routes->add('/todo/api/0.1/designs', 'Designs::index');
 $routes->add('/todo/api/0.1/designs/create', 'Designs::create');
 $routes->add('/todo/api/0.1/designs/update/(:num)', 'Designs::update/$1');
+$routes->add('/todo/api/0.1/designs/delete/(:num)', 'Designs::delete/$1');
 $routes->add('/todo/api/0.1/designs/show/(:num)', 'Designs::show/$1');
 $routes->add('/todo/api/0.1/designs/user/(:num)', 'Designs::showByUserID/$1');
 
 $routes->add('/todo/api/0.1/orders', 'Orders::index');
 $routes->add('/todo/api/0.1/orders/create', 'Orders::create');
 $routes->add('/todo/api/0.1/orders/update/(:num)', 'Orders::update/$1');
+$routes->add('/todo/api/0.1/orders/delete/(:num)', 'Orders::delete/$1');
 $routes->add('/todo/api/0.1/orders/show/(:num)', 'Orders::show/$1');
 $routes->add('/todo/api/0.1/orders/user/(:num)', 'Orders::showByUserID/$1');
 $routes->add('/todo/api/0.1/orders/design/(:num)', 'Orders::showByDesignID/$1');
