@@ -46,7 +46,7 @@ class OrdersModel extends Model
 
     public function findOrderDetails($userID, $designID)
     {
-        $sql = "SELECT d.designName, d.details, d.information, u.address, u.phoneNumber, u.email, d.price FROM designs d INNER JOIN users u WHERE u.id = ? and d.id = ?";
+        $sql = "SELECT d.designName, d.details, d.images, d.imagesPosition, d.information, u.address, u.phoneNumber, u.email, d.price FROM designs d INNER JOIN users u WHERE u.id = ? and d.id = ?";
 
         if ($result = $this->db->query($sql, [$userID, $designID])) {
             return $result->getResultArray();
