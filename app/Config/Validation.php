@@ -88,12 +88,6 @@ class Validation
 		],
 	];
 
-	public $design_remove = [
-		'userID' => [
-			'rules' => 'required',
-		],
-	];
-
 	public $login = [
 		'username' => [
 			'rules' => 'required',

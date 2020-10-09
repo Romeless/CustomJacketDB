@@ -79,21 +79,11 @@ class Designs extends ResourceController
 
     public function remove($id = null)
     {
-        $data = $this->request->getRawInput();
-        
-        $validate = $this->validation->run($data, 'design_remove');
-        $errors = $this->validation->getErrors();
-
-        if($errors)
-        {
-            return $this->fail($errors);
-        }
-
         if(!$this->model->findById($id))
         {
             return $this->fail('Design ID not Found');
         }
-
+        $data = [];
         $data['id'] = $id;
         $data['userID'] = null;
 
