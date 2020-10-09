@@ -199,7 +199,7 @@ class Users extends ResourceController
         $validate = $this->validation->run($login, 'login');
         $errors = $this->validation->getErrors();
 
-        if ($error)
+        if ($errors)
         {
             return $this->fail($errors);
         }
