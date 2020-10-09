@@ -9,20 +9,10 @@ class UsersModel extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'username', 'fullName', "tokenID", 'email', 'password', 'salt', "avatar", 'address', 'phoneNumber', "verified", 'joinDate', "lastLogin"
+        'username', 'fullName', "tokenID", 'email', 'password', 'salt', "avatar", 'address', 'phoneNumber', "verified", 'joinDate', "lastLogin", "admin"
     ];
     protected $returnType = 'App\Entities\Users';
     protected $useTimestamps = false;
-
-
-    public function getLoginCredentialsById($id)
-    {
-        $sql = "SELECT username, password, salt FROM users WHERE id = ?";
-
-        if ($result = $this->db->query($sql, [$id])) {
-            return $result->getResult();
-        }
-    }
 
     public function findById($id)
     {

@@ -77,6 +77,32 @@ class Designs extends ResourceController
 
     }
 
+    public function remove($id = null)
+    {
+        $data = $this->request->getRawInput();
+        
+        $validate = $this->validation->run($data, 'design_remove');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('Design ID not Found');
+        }
+
+        $data['id'] = $id;
+        $data['userID'] = null;
+
+        if($this->model->save($data))
+        {
+            return $this->respondUpdated($data, 'Design Removed');
+        }
+    }
+
     public function delete($id = null)
     {
         if(!$this->model->findById($id))

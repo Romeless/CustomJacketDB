@@ -48,7 +48,7 @@ class Validation
 			'rules' => 'required',
 		],
 		'email' => [
-			'rules' => 'required',
+			'rules' => 'required|valid_email',
 		],
 	];
 
@@ -60,7 +60,7 @@ class Validation
 			'rules' => 'required',
 		],
 		'email' => [
-			'rules' => 'required',
+			'rules' => 'required|valid_email',
 		],
 	];
 
@@ -72,7 +72,7 @@ class Validation
 			'rules' => 'required',
 		],
 		'email' => [
-			'rules' => 'required',
+			'rules' => 'required|valid_email',
 		],
 	];
 
@@ -84,6 +84,12 @@ class Validation
 			'rules' => 'required',
 		],
 		'details' => [
+			'rules' => 'required',
+		],
+	];
+
+	public $design_remove = [
+		'userID' => [
 			'rules' => 'required',
 		],
 	];

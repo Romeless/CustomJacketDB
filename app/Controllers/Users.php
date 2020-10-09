@@ -274,6 +274,7 @@ class Users extends ResourceController
         $token_cred['token'] = $token['token'];
         $token_cred['userID'] = $credentials['id'];
         $token_cred['username'] = $credentials['username'];
+        $token_cred['admin'] = $credentials['admin'];
         $token_cred['device'] = $device;
         $token_cred['createDate'] = date(DATE_FORMAT);
         $token_cred['expireDate'] = date(DATE_FORMAT);
@@ -281,6 +282,7 @@ class Users extends ResourceController
         if ($model->save($token_cred))
         {
             // file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
+            
             return $token_cred;
         }
     }

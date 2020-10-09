@@ -25,6 +25,17 @@
         -> INPUT + id
     </p>
     <p>
+        PUT: todo/api/0.1/designs/delete/(id)
+    </p>
+    <p>
+        PUT: todo/api/0.1/designs/remove/(id)
+        INPUT:
+        -> userID
+        
+        OUTPUT:
+        -> INPUT + id
+    </p>
+    <p>
         GET: todo/api/0.1/designs/show/(id)
 
         OUTPUT:

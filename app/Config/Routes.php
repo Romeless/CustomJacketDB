@@ -45,6 +45,7 @@ $routes->add('/todo/api/0.1/designs', 'Designs::index');
 $routes->add('/todo/api/0.1/designs/create', 'Designs::create');
 $routes->add('/todo/api/0.1/designs/update/(:num)', 'Designs::update/$1');
 $routes->add('/todo/api/0.1/designs/delete/(:num)', 'Designs::delete/$1');
+$routes->add('/todo/api/0.1/designs/remove/(:num)', 'Designs::remove/$1');
 $routes->add('/todo/api/0.1/designs/show/(:num)', 'Designs::show/$1');
 $routes->add('/todo/api/0.1/designs/user/(:num)', 'Designs::showByUserID/$1');
 
