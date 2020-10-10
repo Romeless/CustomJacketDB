@@ -90,6 +90,23 @@ class Orders extends ResourceController
         }
     }
 
+    public function remove($id = null)
+    {
+        if(!$this->model->findById($id))
+        {
+            return $this->fail('Order ID not Found');
+        }
+
+        $data = [];
+        $data['id'] = $id;
+        $data['userID'] = null;
+
+        if($this->model->save($data))
+        {
+            return $this->respondUpdated($data, 'Order Removed');
+        }
+    }
+
     public function show($id = null)
     {
         $data = $this->model->findById($id);

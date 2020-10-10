@@ -9,7 +9,7 @@ class OrdersModel extends Model
     protected $table = 'orders';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'userID', 'designID', 'username', 'address', 'email', 'qty', "status", "price","phoneNumber","information","partnership","partnerAddress"
+        'userID','designID','username','address','email','qty',"status","details","images","imagesPosition","price","phoneNumber","information","partnership","partnerAddress"
     ];
 
     protected $returnType = 'array';
