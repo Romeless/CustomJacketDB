@@ -88,6 +88,12 @@ class Validation
 		],
 	];
 
+	public $design_update = [
+		'userID' => [
+			'rules' => 'required',
+		],
+	];
+
 	public $login = [
 		'username' => [
 			'rules' => 'required',

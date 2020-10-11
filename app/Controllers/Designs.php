@@ -55,7 +55,7 @@ class Designs extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        $validate = $this->validation->run($data, 'design_validation');
+        $validate = $this->validation->run($data, 'design_update');
         $errors = $this->validation->getErrors();
 
         if($errors)

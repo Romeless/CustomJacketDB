@@ -9,7 +9,7 @@ class DesignsModel extends Model
     protected $table = 'designs';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'userID', 'designName', 'details', 'images', 'imagesPosition', 'information', "createDate", "updateDate"
+        'userID', 'designName', 'details', 'images', 'imagesPosition', 'information', "createDate", "updateDate", "price"
     ];
 
     protected $returnType = 'array';
