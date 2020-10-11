@@ -58,7 +58,7 @@ class Orders extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        $validate = $this->validation->run($data, 'order_validation');
+        $validate = $this->validation->run($data, 'order_update');
         $errors = $this->validation->getErrors();
 
         if($errors)

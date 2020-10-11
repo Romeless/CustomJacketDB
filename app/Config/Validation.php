@@ -114,4 +114,13 @@ class Validation
 			'rules' => 'required',
 		],
 	];
+
+	public $order_update = [
+		'userID' => [
+			'rules' => 'required',
+		],
+		'designID' => [
+			'rules' => 'required',
+		],
+	];
 }
