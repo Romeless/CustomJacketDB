@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
+use Google\Client;
 
 class Users extends ResourceController
 {
@@ -43,17 +44,13 @@ class Users extends ResourceController
 
     public function google_auth()
     {
-        $http_origin = $_SERVER['HTTP_ORIGIN'];
+        // $http_origin = $_SERVER['HTTP_ORIGIN'];
 
-        if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
-        {  
-            header("Access-Control-Allow-Origin: " . $http_origin);
-        } else 
-        {
-            // file_put_contents("php://stderr", print_r($http_origin, true));
-        }
-
-        header("Access-Control-Allow-Credentials: true");
+        // if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
+        // {  
+        //     header("Access-Control-Allow-Origin: " . $http_origin);
+        // } 
+        // header("Access-Control-Allow-Credentials: true");
 
         $data = $this->request->getPost();
         $validate = $this->validation->run($data, 'google_auth');
@@ -64,15 +61,13 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
-        // require_once ROOTPATH . 'vendor/autoload.php';
-
         $id_token = $data['tokenID'];
 
-        //$client = new \Google_Client(['client_id' => "334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
-        //$payload = $client->verifyIdToken($id_token);
+        $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
+        
+        return $this->respond($client);
 
-        $payload = [];
-        $payload['sub'] = $data['googleID'];
+        $payload = $client->verifyIdToken($id_token);
         
         if ($payload) {
 
@@ -80,43 +75,29 @@ class Users extends ResourceController
 
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
-                // file_put_contents("php://stderr", print_r($user, true));
 
                 $user = $user[0];
                 
-                //error_log(print_r($user));
                 $response = $this->auth($user, TRUE);
-                //error_log(print_r($response));
-
-                // file_put_contents("php://stderr", print_r($response, true));
 
                 return $this->respond($response);
             }
-
-            // error_log("CREATING NEW USER ".$data['email']);
-
-            // $user = new \App\Entities\Users();
-            // $user->fill($data);
 
             $email_parts = explode('@', $data['email']);
 
             $data['username'] = $email_parts[0].$userid;
             $data['joinDate'] = date(DATE_FORMAT);
 
-            //$array_user = ((array) $user);
-
             if($this->model->save($data))
             {
                 
                 $response = $this->auth($data, true);
 
-                // file_put_contents("php://stderr", print_r($response, true));
 
                 return $this->respondCreated($response, "Account Created");
             }
 
         } else {
-            // file_put_contents("php://stderr", print_r($payload, true));
 
             return $this->fail("Token ID Authentication Fails");
         }
@@ -176,7 +157,7 @@ class Users extends ResourceController
             return $this->respond($data);
         }
 
-        return $this->fail('errors');
+        return $this->fail('User do not exist');
     }
 
     public function getByUsername()
@@ -189,14 +170,14 @@ class Users extends ResourceController
             return $this->respond($cred);
         }
         
-        return $this->fail('errors');
+        return $this->fail('Username do not exist');
     }
 
     public function login()
     {
 
-        $login = $this->request->getPost();
-        $validate = $this->validation->run($login, 'login');
+        $data = $this->request->getPost();
+        $validate = $this->validation->run($data, 'login');
         $errors = $this->validation->getErrors();
 
         if ($errors)
@@ -204,11 +185,34 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
-        $response = $this->auth($login);
+        if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
+        {
+            // error_log(print_r($credentials));
+            $credentials = $credentials[0];
+        } else
+        {
+            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
+            return $this->fail("Username not in database");
+        }
 
-        // file_put_contents("php://stderr", print_r("LOGIN LOG: ".$response, true));
+        if (!password_verify($data['password'], $credentials['password']))
+        {    
+            return $this->fail('Wrong password');
+        }
 
-        return $this->respond($response);
+        if(isset($data['device']))
+        {
+            // error_log(print_r($device));
+            $device = $data['device'];
+        } else
+        {
+            $device = "n/a";
+        }
+
+        $token = $this->generateToken();
+        $tokenStatus = $this->refreshToken($credentials, $token, $device);
+
+        return $this->respond($tokenStatus);
     }
 
     private function auth($data, $googleAuth = FALSE)
@@ -228,7 +232,6 @@ class Users extends ResourceController
             // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
             return "ERROR USERNAME NOT FOUND";
         }
-        
 
         if(isset($data['device']))
         {
@@ -241,6 +244,8 @@ class Users extends ResourceController
 
         if(!$googleAuth)
         {
+            return $this->respond("WRONG PASSWORD");
+
             if ($data['username'] != $credentials['username'])
             {
                 return $this->fail('Something went Wrong');
@@ -248,6 +253,7 @@ class Users extends ResourceController
 
             if (!password_verify($data['password'], $credentials['password']))
             {
+                
                 return $this->fail('Wrong Password '.$data['password']);
             }
         } 

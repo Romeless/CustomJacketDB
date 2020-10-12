@@ -36,6 +36,9 @@ class Validation
 	// Rules
 	//--------------------------------------------------------------------
 
+	//--------------------------------------------------------------------
+	// USERS
+	//--------------------------------------------------------------------
 
 	public $register = [
 		'username' => [
@@ -49,6 +52,15 @@ class Validation
 		],
 		'email' => [
 			'rules' => 'required|valid_email',
+		],
+	];
+
+	public $login = [
+		'username' => [
+			'rules' => 'required',
+		],
+		'password' => [
+			'rules' => 'required',
 		],
 	];
 
@@ -76,6 +88,19 @@ class Validation
 		],
 	];
 
+	public $role_validation = [
+		'id' => [
+			'rules' => 'required'
+		],
+		'role' => [
+			'rules' => 'required'
+		],
+	];
+
+	//--------------------------------------------------------------------
+	// DESIGN
+	//--------------------------------------------------------------------
+
 	public $design_validation = [
 		'userID' => [
 			'rules' => 'required',
@@ -90,15 +115,6 @@ class Validation
 
 	public $design_update = [
 		'userID' => [
-			'rules' => 'required',
-		],
-	];
-
-	public $login = [
-		'username' => [
-			'rules' => 'required',
-		],
-		'password' => [
 			'rules' => 'required',
 		],
 	];
