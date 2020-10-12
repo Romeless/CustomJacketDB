@@ -345,13 +345,15 @@ class Users extends ResourceController
 
     private function confirmRole($data)
     {
-        if(!isset($data['roleID']))
+        if(!isset($data['editorID']))
         {
             return false;
         }
 
-        if($cred = $this->model->find($data['roleID']))
+        if($cred = $this->model->find($data['editorID']))
         {
+            error_log(print_r($data['editorID']));
+
             if($cred['admin'] == 1)
             {
                 return true;
