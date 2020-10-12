@@ -325,12 +325,16 @@ class Users extends ResourceController
 
         if($token_cred = $model->findByToken($data['token']))
         {
+            $token_cred = $token_cred[0];
+
             if($token_cred['userID'] == $data['id'])
             {
                 return true;
             }
 
-            else if($token_cred['admin'] == 1)
+            $user = $this->model->find($token_cred['userID']);
+            
+            if($user['admin'] == 1)
             {
                 return true;
             }
