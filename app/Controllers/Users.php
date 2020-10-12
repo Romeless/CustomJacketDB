@@ -83,6 +83,7 @@ class Users extends ResourceController
 
     public function google_auth()
     {
+        error_log(print_r("START"));
         if (isset($_SERVER['HTTP_ORIGIN']))
         {
             $http_origin = $_SERVER['HTTP_ORIGIN'];
@@ -90,18 +91,23 @@ class Users extends ResourceController
             $http_origin == "localhost:8080";
         }
 
+        error_log(print_r($http_origin));
+
         if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
         {  
              header("Access-Control-Allow-Origin: " . $http_origin);
         } 
         
-
         header("Access-Control-Allow-Credentials: true");
+
+        error_log(print_r($data));
 
         $data = $this->request->getPost();
 
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
+
+        $errors = $this->request->getPost();
 
         if($errors)
         {
