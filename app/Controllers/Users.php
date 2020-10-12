@@ -115,9 +115,6 @@ class Users extends ResourceController
 
         $id_token = $data['tokenID'];
 
-        error_log(print_r($id_token));
-        error_log(print_r(CLIENT_ID));
-
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
         
         return $this->respond($client);

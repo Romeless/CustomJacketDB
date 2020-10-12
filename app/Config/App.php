@@ -21,7 +21,7 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	public $baseURL = 'http://hudie-custom.herokuapp.com/';
+	public $baseURL = 'localhost:8080';
 
 	/*
 	|--------------------------------------------------------------------------
