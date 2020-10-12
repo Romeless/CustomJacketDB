@@ -109,7 +109,7 @@ class Users extends ResourceController
         }
 
         $id_token = $data['tokenID'];
-        
+        error_log(print_r($id_token));
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
         error_log(print_r($client));
         $payload = $client->verifyIdToken($id_token);
