@@ -56,7 +56,7 @@ class Users extends ResourceController
              header("Access-Control-Allow-Origin: " . $http_origin);
         } 
         
-        error_log(print_r($http_origin));
+        //error_log(print_r($http_origin));
 
         header("Access-Control-Allow-Credentials: true");
 
@@ -66,6 +66,8 @@ class Users extends ResourceController
 
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
+
+        error_log(print_r($errors));
 
         if($errors)
         {
