@@ -18,13 +18,11 @@ class TokensModel extends Model
 
     public function findByToken($token)
     {
-        $data = $this->find($token);
+        $sql = "SELECT * FROM tokens WHERE token = ?";
 
-        if ($data) {
-            return $data;
+        if ($result = $this->db->query($sql, [$token])) {
+            return $result->getResultArray();
         }
-
-        return false;
     }
 
     public function findByUserID($userID)

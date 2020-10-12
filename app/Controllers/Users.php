@@ -13,6 +13,7 @@ class Users extends ResourceController
     {
         $this->validation = \Config\Services::validation();
     }
+    
     public function index()
     {
         return $this->respond($this->model->findAll());
@@ -53,26 +54,23 @@ class Users extends ResourceController
 
         if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
         {
-            // error_log(print_r($credentials));
             $credentials = $credentials[0];
         } else
         {
-            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
-            return $this->fail("Username not in database");
+            return $this->failNotFound("Username tidak terdaftar");
         }
 
         if (!password_verify($data['password'], $credentials['password']))
         {    
-            return $this->fail('Wrong password');
+            return $this->fail('Password salah');
         }
 
         if(isset($data['device']))
         {
-            // error_log(print_r($device));
-            $device = $data['device'];
+            $credentials['device'] = $data['device'];
         } else
         {
-            $device = "n/a";
+            $credentials['device'] = "n/a";
         }
 
         $token = $this->generateToken();
@@ -83,15 +81,13 @@ class Users extends ResourceController
 
     public function google_auth()
     {
-        error_log(print_r("START"));
+
         if (isset($_SERVER['HTTP_ORIGIN']))
         {
             $http_origin = $_SERVER['HTTP_ORIGIN'];
         } else {
-            $http_origin == "localhost:8080";
+            $http_origin = "localhost:8080";
         }
-
-        error_log(print_r($http_origin));
 
         if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
         {  
@@ -100,69 +96,104 @@ class Users extends ResourceController
         
         header("Access-Control-Allow-Credentials: true");
 
-        error_log(print_r($data));
-
         $data = $this->request->getPost();
-
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
-
-        $errors = $this->request->getPost();
 
         if($errors)
         {
             return $this->fail($errors);
         }
 
+        // Verify Token
         $id_token = $data['tokenID'];
-        error_log(print_r($id_token));
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
-        error_log(print_r($client));
         $payload = $client->verifyIdToken($id_token);
-        
+
+        // DELETE!
+        // ONLY FOR TESTING USE      
+        $payload = [
+            "sub" => $data['googleID'],
+        ];
+
         if ($payload) {
 
             $userid = $payload['sub'];
 
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
+                // LOGIN TO GOOGLE
 
                 $user = $user[0];
-                
-                $response = $this->auth($user, TRUE);
 
-                return $this->respond($response);
-            }
+                if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
+                {
+                    $credentials = $credentials[0];
+                } else
+                {
+                    return $this->failNotFound("Username tidak terdaftar");
+                }
 
-            $email_parts = explode('@', $data['email']);
+                if(isset($data['device']))
+                {
+                    $credentials['device'] = $data['device'];
+                } else
+                {
+                    $credentials['device'] = "n/a";
+                }
 
-            $data['username'] = $email_parts[0].$userid;
-            $data['joinDate'] = date(DATE_FORMAT);
+                $token = $this->generateToken();
+                $tokenStatus = $this->refreshToken($credentials, $token);
 
-            if($this->model->save($data))
-            {
-                
-                $response = $this->auth($data, true);
+                return $this->respond($tokenStatus);
 
+            } else {
+                // REGISTER NEW ACCOUNT FROM GOOGLE
 
-                return $this->respondCreated($response, "Account Created");
+                $email_parts = explode('@', $data['email']);
+
+                $data['username'] = $email_parts[0].$userid;
+                $data['joinDate'] = date(DATE_FORMAT);
+
+                if(!isset($data['device']))
+                {
+                   $data['device'] = "n/a";
+                }
+
+                if($this->model->save($data))
+                {
+                    
+                    $token = $this->generateToken();
+                    $tokenStatus = $this->refreshToken($data, $token, $device);
+
+                    return $this->respondCreated($response, "Akun berhasil terbuat");
+
+                }
+                return $this->fail("Akun baru tidak berhasil dibuat");
             }
 
         } else {
-
-            return $this->fail("Token ID Authentication Fails");
+            return $this->fail("Akun google gagal di-verifikasi");
         }
     }
 
     public function update($id = null)
     {
+        if(!$this->model->findById($id))
+        {
+            return $this->failNotFound('Id tidak ditemukan');
+        }
 
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        } 
+
         $token_validate = $this->validation->run($data, 'user_validation');
         $validate = $this->validation->run($data, 'update_user');
-
         $errors = $this->validation->getErrors();
 
         if($errors)
@@ -170,28 +201,45 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
-        if(!$this->model->findById($id))
+        $roleConfirmation = $this->confirmRole($data);
+
+        if ($roleConfirmation)
         {
-            return $this->fail('Id tidak ditemukan');
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
         }
 
-        $user = new \App\Entities\Users();
-        $user->fill($data);
-
-        if($this->model->save($user))
+        if ($tokenConfirmation)
         {
-            return $this->respondUpdated($user, 'User profil ppdate berhasil!');
-        }
+            $user = new \App\Entities\Users();
+            $user->fill($data);
 
+            if($this->model->save($user))
+            {
+                return $this->respondUpdated($user, 'User profil update berhasil!');
+            }
+        } 
+        
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function delete($id = null)
     {
+        if(!$this->model->findById($id))
+        {
+            return $this->failNotFound('Akun tidak ditemukan');
+        }
+
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        }
+
         $token_validate = $this->validation->run($data, 'user_validation');
-        $role_validate = $this->validation->run($data, 'role_validation');
         $errors = $this->validation->getErrors();
 
         if($errors)
@@ -199,9 +247,13 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
-        if(!$this->model->findById($id))
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
         {
-            return $this->fail('id tidak ditemukan');
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
         }
 
         if($this->model->delete($id)){
@@ -213,96 +265,31 @@ class Users extends ResourceController
     {
         $data = $this->model->findById($id);
 
-        $token_validate = $this->validation->run($data, 'user_validation');
-        $role_validate = $this->validation->run($data, 'role_validation');
-        $errors = $this->validation->getErrors();
-
-        if($errors)
-        {
-            return $this->fail($errors);
-        }
-
         if($data)
         {
             return $this->respond($data);
         }
 
-        return $this->fail('User do not exist');
+        return $this->failNotFound('User do not exist');
     }
 
-    public function getByUsername()
+    public function getByUsername($username = null)
     {
-        $data = $this->request->getPost();
-        $username = $data['username'];
-
         if($cred = $this->model->findByUserName($username))
         {
             return $this->respond($cred);
         }
         
-        return $this->fail('Username do not exist');
+        return $this->failNotFound('User tidak ada');
     }
 
-    
-
-    private function auth($data, $googleAuth = FALSE)
-    {
-        // $data
-        // -> id
-        // -> username
-
-        // file_put_contents("php://stderr", print_r($data, true));
-
-        if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
-        {
-            // error_log(print_r($credentials));
-            $credentials = $credentials[0];
-        } else
-        {
-            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
-            return "ERROR USERNAME NOT FOUND";
-        }
-
-        if(isset($data['device']))
-        {
-            // error_log(print_r($device));
-            $device = $data['device'];
-        } else
-        {
-            $device = "n/a";
-        }
-
-        if(!$googleAuth)
-        {
-            return $this->respond("WRONG PASSWORD");
-
-            if ($data['username'] != $credentials['username'])
-            {
-                return $this->fail('Something went Wrong');
-            }
-
-            if (!password_verify($data['password'], $credentials['password']))
-            {
-                
-                return $this->fail('Wrong Password '.$data['password']);
-            }
-        } 
-
-        $token = $this->generateToken();
-        $tokenStatus = $this->refreshToken($credentials, $token, $device);
-
-        // file_put_contents("php://stderr", print_r("AUTH LOG: ".$tokenStatus, true));
-
-        return $tokenStatus;
-    }
-
-    private function refreshToken($credentials, $token, $device)
+    private function refreshToken($credentials, $token)
     {
         $model = model('App\Models\TokensModel');
         
         $token_cred = [];
         
-        if ($token_cred = $model->findByUserIdAndDevice($credentials['id'], $device))
+        if ($token_cred = $model->findByUserIdAndDevice($credentials['id'], $credentials['device']))
         {
             $token_cred = $token_cred[0];
         }
@@ -311,14 +298,12 @@ class Users extends ResourceController
         $token_cred['userID'] = $credentials['id'];
         $token_cred['username'] = $credentials['username'];
         $token_cred['admin'] = $credentials['admin'];
-        $token_cred['device'] = $device;
+        $token_cred['device'] = $credentials['device'];
         $token_cred['createDate'] = date(DATE_FORMAT);
         $token_cred['expireDate'] = date(DATE_FORMAT);
 
         if ($model->save($token_cred))
         {
-            // file_put_contents("php://stderr", print_r("TOKEN LOG: ".$token_cred, true));
-            
             return $token_cred;
         }
     }
@@ -328,4 +313,31 @@ class Users extends ResourceController
         return ['token' => bin2hex(random_bytes($length))];
     }
 
+    private function confirmToken($data)
+    {
+        $model = model('App\Models\TokensModel');
+
+        if($token_cred = $model->findByToken($token))
+        {
+            if($token_cred['userID'] == $data['id'])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function confirmRole($data)
+    {
+        if($cred = $this->model->find($data['id']))
+        {
+            if($cred['admin'] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
