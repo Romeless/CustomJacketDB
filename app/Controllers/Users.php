@@ -13,9 +13,6 @@ class Users extends ResourceController
     {
         $this->validation = \Config\Services::validation();
     }
-
-    // JANGAN LUPA UPDATE VALIDATION SESUAI GOOGLE JUGA
-
     public function index()
     {
         return $this->respond($this->model->findAll());
@@ -98,7 +95,6 @@ class Users extends ResourceController
              header("Access-Control-Allow-Origin: " . $http_origin);
         } 
         
-        //error_log(print_r($http_origin));
 
         header("Access-Control-Allow-Credentials: true");
 
@@ -106,7 +102,6 @@ class Users extends ResourceController
 
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
-
 
         if($errors)
         {
@@ -116,9 +111,7 @@ class Users extends ResourceController
         $id_token = $data['tokenID'];
 
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
-        
-        return $this->respond($client);
-
+        error_log(print_r($client));
         $payload = $client->verifyIdToken($id_token);
         
         if ($payload) {
