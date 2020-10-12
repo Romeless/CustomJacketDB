@@ -77,9 +77,6 @@ class Validation
 	];
 
 	public $update_user = [
-		'username' => [
-			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username,id,{id}]',
-		],
 		'fullName' => [
 			'rules' => 'required',
 		],
