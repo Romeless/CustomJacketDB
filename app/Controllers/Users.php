@@ -256,9 +256,15 @@ class Users extends ResourceController
             $tokenConfirmation = $this->confirmToken($data);
         }
 
-        if($this->model->delete($id)){
-            return $this->respondDeleted('Id '.$id.' Terhapus');
+        if ($tokenConfirmation)
+        {
+            if($this->model->delete($id))
+            {
+                return $this->respondDeleted('Id '.$id.' Terhapus');
+            }
         }
+        
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function show($id = null)
