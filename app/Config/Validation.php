@@ -42,26 +42,61 @@ class Validation
 
 	public $register = [
 		'username' => [
+			'label' => 'username',
 			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username]',
+			'errors' => [
+				'required' => 'Semua akun membutuhkan {field}',
+				'min_length' => 'Panjang {field} minimal 5 huruf',
+				'max_length' => 'Panjang {field} maximal 60 huruf',
+				'is_unique' => 'Username sudah diambil',
+			],
 		],
 		'password' => [
-			'rules' => 'required',
+			'label' => 'password',
+			'rules' => 'required|min_length[5]|max_length[60]',
+			'errors' => [
+				'required' => 'Semua akun membutuhkan {field}',
+				'min_length' => 'Panjang {field} minimal 5 huruf',
+				'max_length' => 'Panjang {field} maximal 60 huruf',
+			],
 		],
 		'fullName' => [
-			'rules' => 'required',
+			'label' => 'fullName',
+			'rules' => 'required|max_length[250]',
+			'errors' => [
+				'required' => 'Semua akun membutuhkan {field}',
+				'max_length' => 'Panjang {field} maximal 250 huruf',
+			],
 		],
 		'email' => [
-			'rules' => 'required|valid_email',
+			'label' => 'email',
+			'rules' => 'required|max_length[250]|valid_email',
+			'errors' => [
+				'required' => 'Semua akun membutuhkan {field}',
+				'max_length' => 'Panjang {field} maximal 250 huruf',
+				'valid_email' => 'Format email tidak valid!'
+			],
 		],
 	];
 
 	public $login = [
 		'username' => [
-			'rules' => 'required',
+			'label' => 'username',
+			'rules' => 'required|max_length[60]',
+			'errors' => [
+				'required' => 'Tolong masukkan {field}',
+				'max_length' => 'Panjang {field} maximal 60 huruf',
+			],
 		],
 		'password' => [
-			'rules' => 'required',
+			'label' => 'password',
+			'rules' => 'required|max_length[60]',
+			'errors' => [
+				'required' => 'Tolong masukkan {field}',
+				'max_length' => 'Panjang {field} maximal 60 huruf',
+			],
 		],
+		
 	];
 
 	public $google_auth = [
@@ -78,10 +113,13 @@ class Validation
 
 	public $update_user = [
 		'fullName' => [
-			'rules' => 'required',
+			'rules' => 'max_length[250]',
 		],
 		'email' => [
-			'rules' => 'required|valid_email',
+			'rules' => 'valid_email|max_length[250]',
+		],
+		'address' => [
+			'rules' => 'max_length[250]',
 		],
 	];
 
@@ -91,6 +129,21 @@ class Validation
 		],
 		'role' => [
 			'rules' => 'required'
+		],
+	];
+
+	public $user_validation = [
+		'id' => [
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'ID tidak di input, harap Log-in!'
+			],
+		],
+		'token' => [
+			'rules' => 'required',
+			'errors' => [
+				'required' => 'Token tidak di input, harap Log-in!'
+			],
 		],
 	];
 

@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
-use Google\Client;
+// use Google\Client;
 
 class Users extends ResourceController
 {
@@ -42,6 +42,48 @@ class Users extends ResourceController
         }
     }
 
+    public function login()
+    {
+
+        $data = $this->request->getPost();
+        $validate = $this->validation->run($data, 'login');
+        $errors = $this->validation->getErrors();
+
+        if ($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
+        {
+            // error_log(print_r($credentials));
+            $credentials = $credentials[0];
+        } else
+        {
+            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
+            return $this->fail("Username not in database");
+        }
+
+        if (!password_verify($data['password'], $credentials['password']))
+        {    
+            return $this->fail('Wrong password');
+        }
+
+        if(isset($data['device']))
+        {
+            // error_log(print_r($device));
+            $device = $data['device'];
+        } else
+        {
+            $device = "n/a";
+        }
+
+        $token = $this->generateToken();
+        $tokenStatus = $this->refreshToken($credentials, $token, $device);
+
+        return $this->respond($tokenStatus);
+    }
+
     public function google_auth()
     {
         if (isset($_SERVER['HTTP_ORIGIN']))
@@ -61,13 +103,10 @@ class Users extends ResourceController
         header("Access-Control-Allow-Credentials: true");
 
         $data = $this->request->getPost();
-        
-        error_log(print_r($data));
 
         $validate = $this->validation->run($data, 'google_auth');
         $errors = $this->validation->getErrors();
 
-        error_log(print_r($errors));
 
         if($errors)
         {
@@ -75,6 +114,9 @@ class Users extends ResourceController
         }
 
         $id_token = $data['tokenID'];
+
+        error_log(print_r($id_token));
+        error_log(print_r(CLIENT_ID));
 
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
         
@@ -122,8 +164,9 @@ class Users extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        // file_put_contents("php://stderr", print_r($data, true));
+        $token_validate = $this->validation->run($data, 'user_validation');
         $validate = $this->validation->run($data, 'update_user');
+
         $errors = $this->validation->getErrors();
 
         if($errors)
@@ -133,7 +176,7 @@ class Users extends ResourceController
 
         if(!$this->model->findById($id))
         {
-            return $this->fail('id tidak ditemukan');
+            return $this->fail('Id tidak ditemukan');
         }
 
         $user = new \App\Entities\Users();
@@ -141,7 +184,7 @@ class Users extends ResourceController
 
         if($this->model->save($user))
         {
-            return $this->respondUpdated($user, 'User Updated');
+            return $this->respondUpdated($user, 'User profil ppdate berhasil!');
         }
 
     }
@@ -150,6 +193,15 @@ class Users extends ResourceController
     {
         $data = $this->request->getRawInput();
         $data['id'] = $id;
+
+        $token_validate = $this->validation->run($data, 'user_validation');
+        $role_validate = $this->validation->run($data, 'role_validation');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
 
         if(!$this->model->findById($id))
         {
@@ -164,6 +216,15 @@ class Users extends ResourceController
     public function show($id = null)
     {
         $data = $this->model->findById($id);
+
+        $token_validate = $this->validation->run($data, 'user_validation');
+        $role_validate = $this->validation->run($data, 'role_validation');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
 
         if($data)
         {
@@ -186,47 +247,7 @@ class Users extends ResourceController
         return $this->fail('Username do not exist');
     }
 
-    public function login()
-    {
-
-        $data = $this->request->getPost();
-        $validate = $this->validation->run($data, 'login');
-        $errors = $this->validation->getErrors();
-
-        if ($errors)
-        {
-            return $this->fail($errors);
-        }
-
-        if($credentials = $this->model->findByColumn(['username'], [$data['username']]))
-        {
-            // error_log(print_r($credentials));
-            $credentials = $credentials[0];
-        } else
-        {
-            // file_put_contents("php://stderr", print_r($this->model->findByColumn(['username'], [$data['username']]),true));
-            return $this->fail("Username not in database");
-        }
-
-        if (!password_verify($data['password'], $credentials['password']))
-        {    
-            return $this->fail('Wrong password');
-        }
-
-        if(isset($data['device']))
-        {
-            // error_log(print_r($device));
-            $device = $data['device'];
-        } else
-        {
-            $device = "n/a";
-        }
-
-        $token = $this->generateToken();
-        $tokenStatus = $this->refreshToken($credentials, $token, $device);
-
-        return $this->respond($tokenStatus);
-    }
+    
 
     private function auth($data, $googleAuth = FALSE)
     {
