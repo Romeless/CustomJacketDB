@@ -42,38 +42,38 @@ class Validation
 
 	public $register = [
 		'username' => [
-			'label' => 'username',
+			'label' => 'Username',
 			'rules' => 'required|min_length[5]|max_length[60]|is_unique[users.username]',
 			'errors' => [
 				'required' => 'Semua akun membutuhkan {field}',
 				'min_length' => 'Panjang {field} minimal 5 huruf',
-				'max_length' => 'Panjang {field} maximal 60 huruf',
+				'max_length' => 'Panjang {field} maksimal 60 huruf',
 				'is_unique' => 'Username sudah diambil',
 			],
 		],
 		'password' => [
-			'label' => 'password',
+			'label' => 'Password',
 			'rules' => 'required|min_length[5]|max_length[60]',
 			'errors' => [
 				'required' => 'Semua akun membutuhkan {field}',
 				'min_length' => 'Panjang {field} minimal 5 huruf',
-				'max_length' => 'Panjang {field} maximal 60 huruf',
+				'max_length' => 'Panjang {field} maksimal 60 huruf',
 			],
 		],
 		'fullName' => [
-			'label' => 'fullName',
+			'label' => 'Nama Panjang',
 			'rules' => 'required|max_length[250]',
 			'errors' => [
 				'required' => 'Semua akun membutuhkan {field}',
-				'max_length' => 'Panjang {field} maximal 250 huruf',
+				'max_length' => 'Panjang {field} maksimal 250 huruf',
 			],
 		],
 		'email' => [
-			'label' => 'email',
+			'label' => 'Email',
 			'rules' => 'required|max_length[250]|valid_email',
 			'errors' => [
 				'required' => 'Semua akun membutuhkan {field}',
-				'max_length' => 'Panjang {field} maximal 250 huruf',
+				'max_length' => 'Panjang {field} maksimal 250 huruf',
 				'valid_email' => 'Format email tidak valid!'
 			],
 		],
@@ -81,19 +81,19 @@ class Validation
 
 	public $login = [
 		'username' => [
-			'label' => 'username',
+			'label' => 'Username',
 			'rules' => 'required|max_length[60]',
 			'errors' => [
 				'required' => 'Tolong masukkan {field}',
-				'max_length' => 'Panjang {field} maximal 60 huruf',
+				'max_length' => 'Panjang {field} maksimal 60 huruf',
 			],
 		],
 		'password' => [
-			'label' => 'password',
+			'label' => 'Password',
 			'rules' => 'required|max_length[60]',
 			'errors' => [
 				'required' => 'Tolong masukkan {field}',
-				'max_length' => 'Panjang {field} maximal 60 huruf',
+				'max_length' => 'Panjang {field} maksimal 60 huruf',
 			],
 		],
 		
@@ -113,13 +113,26 @@ class Validation
 
 	public $update_user = [
 		'fullName' => [
+			'label' => 'Nama Panjang',
 			'rules' => 'max_length[250]',
+			'errors' => [
+				'max_length' => 'Panjang {field} maksimal 60 huruf',
+			],
 		],
 		'email' => [
+			'label' => 'Email',
 			'rules' => 'valid_email|max_length[250]',
+			'errors' => [
+				'valid_email' => 'Format email tidak valid',
+				'max_length' => 'Panjang {field} maksimal 250 huruf',
+			],
 		],
 		'address' => [
+			'label' => 'Alamat',
 			'rules' => 'max_length[250]',
+			'errors' => [
+				'max_length' => 'Panjang {field} maksimal 250 huruf',
+			],
 		],
 	];
 
@@ -153,46 +166,92 @@ class Validation
 
 	public $design_validation = [
 		'userID' => [
+			'label' => 'Pembuat design',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 		'designName' => [
+			'label' => 'Nama design',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera',
+			],
 		],
 		'details' => [
+			'label' => 'Details',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} dibutuhkan',
+			],
 		],
 	];
 
 	public $design_update = [
 		'userID' => [
+			'label' => 'Pembuat design',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 	];
 
 	public $order_validation = [
 		'userID' => [
+			'label' => 'Pembuat order',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 		'designID' => [
+			'label' => 'Design',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 		'qty' => [
-			'rules' => 'required',
+			'label' => 'Kuantitas',
+			'rules' => 'required|greater_than[0]',
+			'errors' => [
+				'required' => '{field} tidak tertera',
+				'greater_than' => '{field} harus angka positif'
+			]
 		],
 		'price' => [
-			'rules' => 'required',
+			'label' => 'Design',
+			'rules' => 'required|greater_than[0]',
+			'errors' => [
+				'required' => '{field} tidak tertera',
+				'greater_than' => '{field} harus angka positif'
+			]
 		],
 		'information' => [
+			'label' => 'Informasi',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} harus lebih lengkap'
+			]
 		],
 	];
 
 	public $order_update = [
 		'userID' => [
+			'label' => 'Pembuat order',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 		'designID' => [
+			'label' => 'Design',
 			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} tidak tertera'
+			]
 		],
 	];
 }

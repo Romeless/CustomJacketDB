@@ -55,10 +55,20 @@ class Orders extends ResourceController
 
     public function update($id = null)
     {
+        if(!$this->model->findById($id))
+        {
+            return $this->failNotFound('Order id tidak ditemukan');
+        }
+
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
-        $validate = $this->validation->run($data, 'order_update');
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        }
+
+        $validate = $this->validation->run($data, 'order_validation');
         $errors = $this->validation->getErrors();
 
         if($errors)
@@ -66,16 +76,26 @@ class Orders extends ResourceController
             return $this->fail($errors);
         }
 
-        if(!$this->model->findById($id))
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
         {
-            return $this->fail('order id tidak ditemukan');
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
         }
 
-        if($this->model->save($data))
+        if ($tokenConfirmation)
         {
-            return $this->respondUpdated($data, 'Order Updated');
+            if($this->model->save($data))
+            {
+                return $this->respondUpdated($data, 'Order Updated');
+            }
+
+            return $this->fail('Order gagal dirubah');
         }
 
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function delete($id = null)
@@ -85,26 +105,76 @@ class Orders extends ResourceController
             return $this->fail('id tidak ditemukan');
         }
 
-        if($this->model->delete($id)){
-            return $this->respondDeleted('Order Id '.$id.' Deleted');
+        $data = [];
+        $data['id'] = $id;
+
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
         }
+
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
+        {
+            $tokenConfirmation = true;
+        } else 
+        {
+            $tokenConfirmation = $this->confirmToken($data);
+        }
+
+        if ($tokenConfirmation)
+        {
+            if($this->model->delete($id))
+            {
+                return $this->respondDeleted('Order Id '.$id.' Deleted');
+            }
+            
+            return $this->fail('Order gagal dihapus');
+        }
+
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
+
+        
     }
 
     public function remove($id = null)
     {
         if(!$this->model->findById($id))
         {
-            return $this->fail('Order ID not Found');
+            return $this->fail('Design ID not Found');
         }
 
         $data = [];
         $data['id'] = $id;
+
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        }
+
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
+        {
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
+        }
+
         $data['userID'] = null;
 
-        if($this->model->save($data))
+        if ($tokenConfirmation)
         {
-            return $this->respondUpdated($data, 'Order Removed');
+            if($this->model->save($data))
+            {
+                return $this->respondUpdated($data, 'Order Removed');
+            }
+
+            return $this->fail('Order gagal dibuang');
         }
+
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function show($id = null)
@@ -158,5 +228,49 @@ class Orders extends ResourceController
         }
 
         return $this->fail('errors');
+    }
+
+    private function confirmToken($data)
+    {
+        $model = model('App\Models\TokensModel');
+
+        if($token_cred = $model->findByToken($data['token']))
+        {
+            $token_cred = $token_cred[0];
+
+            if($token_cred['userID'] == $data['userID'])
+            {
+                return true;
+            }
+
+            $user = $this->model->find($token_cred['userID']);
+            
+            if($user['admin'] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function confirmRole($data)
+    {
+        if(!isset($data['editorID']))
+        {
+            return false;
+        }
+
+        if($cred = $this->model->find($data['editorID']))
+        {
+            error_log(print_r($data['editorID']));
+
+            if($cred['admin'] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

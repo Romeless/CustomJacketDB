@@ -20,18 +20,10 @@ class Designs extends ResourceController
 
     public function create()
     {
-        //error_log("design create");
-
         $data = $this->request->getPost();
-        
-        //error_log("Data: ");
-        //file_put_contents("php://stderr", print_r($data, true));
         
         $validate = $this->validation->run($data, 'design_validation');
         $errors = $this->validation->getErrors();
-
-        //file_put_contents("php://stderr", print_r($validate, true));
-        //file_put_contents("php://stderr", print_r($errors, true));
 
         if($errors)
         {
@@ -40,8 +32,6 @@ class Designs extends ResourceController
 
         $data['createDate'] = date(DATE_FORMAT);
         $data['updateDate'] = date(DATE_FORMAT);
-
-        //file_put_contents("php://stderr", print_r($data, true));
 
         if($this->model->save($data))
         {
@@ -52,8 +42,18 @@ class Designs extends ResourceController
     public function update($id = null)
     {
 
+        if(!$this->model->findById($id))
+        {
+            return $this->failNotFound('Design id tidak ditemukan');
+        }
+
         $data = $this->request->getRawInput();
         $data['id'] = $id;
+        $data['updateDate'] = date(DATE_FORMAT);
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        }
 
         $validate = $this->validation->run($data, 'design_update');
         $errors = $this->validation->getErrors();
@@ -63,18 +63,24 @@ class Designs extends ResourceController
             return $this->fail($errors);
         }
 
-        if(!$this->model->findById($id))
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
         {
-            return $this->fail('design id tidak ditemukan');
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
         }
 
-        $data['updateDate'] = date(DATE_FORMAT);
-
-        if($this->model->save($data))
+        if ($tokenConfirmation)
         {
-            return $this->respondUpdated($data, 'Design Updated');
+            if($this->model->save($data))
+            {
+                return $this->respondUpdated($data, 'Design Updated');
+            }
         }
 
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function remove($id = null)
@@ -83,26 +89,74 @@ class Designs extends ResourceController
         {
             return $this->fail('Design ID not Found');
         }
+
         $data = [];
         $data['id'] = $id;
+        
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
+        }
+
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
+        {
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
+        }
+
         $data['userID'] = null;
 
-        if($this->model->save($data))
+        if ($tokenConfirmation)
         {
-            return $this->respondUpdated($data, 'Design Removed');
+            if($this->model->save($data))
+            {
+                return $this->respondUpdated($data, 'Design Removed');
+            }
+
+            return $this->fail('Design gagal dirubah');
         }
+
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function delete($id = null)
     {
         if(!$this->model->findById($id))
         {
-            return $this->fail('id tidak ditemukan');
+            return $this->fail('Design id tidak ditemukan');
         }
 
-        if($this->model->delete($id)){
-            return $this->respondDeleted('Design Id '.$id.' Deleted');
+        $data = [];
+        $data['id'] = $id;
+
+        if (!isset($data['token']))
+        {
+            $data['token'] = "TOKENWHATSTHAT";
         }
+
+        $roleConfirmation = $this->confirmRole($data);
+        
+        if ($roleConfirmation)
+        {
+            $tokenConfirmation = true;
+        } else {
+            $tokenConfirmation = $this->confirmToken($data);
+        }
+
+        if ($tokenConfirmation)
+        {
+            if($this->model->delete($id))
+            {
+                return $this->respondDeleted('Design Id '.$id.' Deleted');
+            }
+
+            return $this->fail("Design gagal dihapus");
+        }
+
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
     public function show($id = null)
@@ -128,5 +182,49 @@ class Designs extends ResourceController
         }
 
         return $this->fail('errors');
+    }
+
+    private function confirmToken($data)
+    {
+        $model = model('App\Models\TokensModel');
+
+        if($token_cred = $model->findByToken($data['token']))
+        {
+            $token_cred = $token_cred[0];
+
+            if($token_cred['userID'] == $data['userID'])
+            {
+                return true;
+            }
+
+            $user = $this->model->find($token_cred['userID']);
+            
+            if($user['admin'] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function confirmRole($data)
+    {
+        if(!isset($data['editorID']))
+        {
+            return false;
+        }
+
+        if($cred = $this->model->find($data['editorID']))
+        {
+            error_log(print_r($data['editorID']));
+
+            if($cred['admin'] == 1)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
