@@ -323,9 +323,14 @@ class Users extends ResourceController
     {
         $model = model('App\Models\TokensModel');
 
-        if($token_cred = $model->findByToken($token))
+        if($token_cred = $model->findByToken($data['token']))
         {
             if($token_cred['userID'] == $data['id'])
+            {
+                return true;
+            }
+
+            else if($token_cred['admin'] == 1)
             {
                 return true;
             }
