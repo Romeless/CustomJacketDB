@@ -13,7 +13,7 @@ class Users extends ResourceController
     {
         $this->validation = \Config\Services::validation();
     }
-    
+
     public function index()
     {
         return $this->respond($this->model->findAll());
@@ -257,7 +257,7 @@ class Users extends ResourceController
         }
 
         if($this->model->delete($id)){
-            return $this->respondDeleted('Id '.$id.' Deleted');
+            return $this->respondDeleted('Id '.$id.' Terhapus');
         }
     }
 
@@ -270,7 +270,7 @@ class Users extends ResourceController
             return $this->respond($data);
         }
 
-        return $this->failNotFound('User do not exist');
+        return $this->failNotFound('User tidak ditemukan');
     }
 
     public function getByUsername($username = null)
@@ -330,7 +330,12 @@ class Users extends ResourceController
 
     private function confirmRole($data)
     {
-        if($cred = $this->model->find($data['id']))
+        if(!isset($data['roleID']))
+        {
+            return false;
+        }
+
+        if($cred = $this->model->find($data['roleID']))
         {
             if($cred['admin'] == 1)
             {
