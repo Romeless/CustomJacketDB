@@ -52,6 +52,7 @@ class Designs extends ResourceController
         $data['updateDate'] = date(DATE_FORMAT);
         if (!isset($data['token']))
         {
+            error_log('Token tidak dicantumkan');
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -80,7 +81,7 @@ class Designs extends ResourceController
             }
         }
 
-        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
+        return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini". $tokenConfirmation . " - " . $roleConfirmation);
     }
 
     public function remove($id = null)
@@ -90,11 +91,12 @@ class Designs extends ResourceController
             return $this->fail('Design ID not Found');
         }
 
-        $data = [];
+        $data = $this->request->getRawInput();;
         $data['id'] = $id;
         
         if (!isset($data['token']))
         {
+            error_log('Token tidak dicantumkan');
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -129,11 +131,12 @@ class Designs extends ResourceController
             return $this->fail('Design id tidak ditemukan');
         }
 
-        $data = [];
+        $data = $this->request->getRawInput();;
         $data['id'] = $id;
 
         if (!isset($data['token']))
         {
+            error_log('Token tidak dicantumkan');
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -186,10 +189,12 @@ class Designs extends ResourceController
 
     private function confirmToken($data)
     {
-        $model = model('App\Models\TokensModel');
+        $tokenModel = model('App\Models\TokensModel');
+        $userModel = model('App\Models\UsersModel');
 
-        if($token_cred = $model->findByToken($data['token']))
+        if($token_cred = $tokenModel->findByToken($data['token']))
         {
+
             $token_cred = $token_cred[0];
 
             if($token_cred['userID'] == $data['userID'])
@@ -197,7 +202,7 @@ class Designs extends ResourceController
                 return true;
             }
 
-            $user = $this->model->find($token_cred['userID']);
+            $user = $userModel->find($token_cred['userID']);
             
             if($user['admin'] == 1)
             {
@@ -205,25 +210,32 @@ class Designs extends ResourceController
             }
         }
 
+        error_log(print_r('Token tidak ditemukan di database'));
+
         return false;
     }
 
     private function confirmRole($data)
     {
+
+        $model = model('App\Models\UsersModel');
+
         if(!isset($data['editorID']))
         {
+            error_log(print('Editor Id tidak dicantumkan'));
             return false;
         }
 
-        if($cred = $this->model->find($data['editorID']))
+        if($cred = $model->find($data['editorID']))
         {
-            error_log(print_r($data['editorID']));
 
             if($cred['admin'] == 1)
             {
                 return true;
             }
         }
+
+        error_log(print('Editor Id bukan Id yang valid'));
 
         return false;
     }
