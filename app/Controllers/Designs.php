@@ -18,6 +18,16 @@ class Designs extends ResourceController
         return $this->respond($this->model->findAllWithName());
     }
 
+    public function indexShareable($id = null)
+    {
+        if (isset($id))
+        {
+            return $this->respond($this->model->findShareable($id));
+        }
+        
+        return $this->respond($this->model->findAllShareable());
+    }
+
     public function create()
     {
         $data = $this->request->getPost();

@@ -43,6 +43,8 @@ $routes->add('/todo/api/0.1/users/login', 'Users::login');
 $routes->add('/todo/api/0.1/users/user', 'Users::getByUsername');
 
 $routes->add('/todo/api/0.1/designs', 'Designs::index');
+$routes->add('/todo/api/0.1/designs/share', 'Designs::indexShareable');
+$routes->add('/todo/api/0.1/designs/share/(:num)', 'Designs::indexShareable/$1');
 $routes->add('/todo/api/0.1/designs/create', 'Designs::create');
 $routes->add('/todo/api/0.1/designs/update/(:num)', 'Designs::update/$1');
 $routes->add('/todo/api/0.1/designs/delete/(:num)', 'Designs::delete/$1');

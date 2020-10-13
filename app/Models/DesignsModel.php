@@ -9,15 +9,33 @@ class DesignsModel extends Model
     protected $table = 'designs';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'userID', 'designName', 'details', 'images', 'imagesPosition', 'information', "createDate", "updateDate", "price"
+        'userID', 'designName', 'details', 'images', 'imagesPosition', 'information', "createDate", "updateDate", "price", 'share'
     ];
 
     protected $returnType = 'array';
-    protected $useTimestamps = false;
+    protected $useTimestamps = false; 
+
+    public function findShareable($userID)
+    {
+        $sql = "SELECT designs.id,designs.userID,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username,designs.share FROM designs inner join users ON designs.userID = users.id WHERE share = 1 AND users.id = ?";
+
+        if ($result = $this->db->query($sql, [$userID])) {
+            return $result->getResultArray();
+        }
+    }
+
+    public function findAllShareable()
+    {
+        $sql = "SELECT designs.id,designs.userID,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username,designs.share FROM designs inner join users ON designs.userID = users.id WHERE share = 1";
+
+        if ($result = $this->db->query($sql)) {
+            return $result->getResultArray();
+        }
+    }
 
     public function findAllWithName()
     {
-        $sql = "SELECT designs.id,designs.userID,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username FROM designs inner join users ON designs.userID = users.id";
+        $sql = "SELECT designs.id,designs.userID,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username,designs.share FROM designs inner join users ON designs.userID = users.id";
 
         if ($result = $this->db->query($sql)) {
             return $result->getResultArray();
@@ -37,7 +55,7 @@ class DesignsModel extends Model
 
     public function findByUserID($userID)
     {
-        $sql = "SELECT designs.id,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username FROM designs inner join users ON designs.userID = users.id where userID = ?";
+        $sql = "SELECT designs.id,designs.designName,designs.details,designs.images,designs.imagesPosition,designs.information,designs.createDate,designs.updateDate,designs.price,users.username,designs.share FROM designs inner join users ON designs.userID = users.id where userID = ?";
 
         if ($result = $this->db->query($sql, [$userID])) {
             return $result->getResultArray();
