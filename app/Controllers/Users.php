@@ -352,7 +352,7 @@ class Users extends ResourceController
 
         if($cred = $this->model->find($data['editorID']))
         {
-            error_log(print_r($data['editorID']));
+            
 
             if($cred['admin'] == 1)
             {

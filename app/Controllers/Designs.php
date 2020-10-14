@@ -62,7 +62,7 @@ class Designs extends ResourceController
         $data['updateDate'] = date(DATE_FORMAT);
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -106,7 +106,7 @@ class Designs extends ResourceController
         
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -146,7 +146,7 @@ class Designs extends ResourceController
 
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -220,7 +220,7 @@ class Designs extends ResourceController
             }
         }
 
-        error_log(print_r('Token tidak ditemukan di database'));
+        
 
         return false;
     }
@@ -232,7 +232,7 @@ class Designs extends ResourceController
 
         if(!isset($data['editorID']))
         {
-            error_log(print('Editor Id tidak dicantumkan'));
+            
             return false;
         }
 
@@ -245,7 +245,7 @@ class Designs extends ResourceController
             }
         }
 
-        error_log(print('Editor Id bukan Id yang valid'));
+        
 
         return false;
     }

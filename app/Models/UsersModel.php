@@ -71,7 +71,7 @@ class UsersModel extends Model
             }
         }
 
-        // error_log(print_r($sql."\n"));
+        // 
         
         try {
             if ($result = $this->db->query($sql, $values)) {
@@ -79,7 +79,7 @@ class UsersModel extends Model
             }
         } catch (Exception $e)
         {
-            error_log(print_r($sql));
+            
             return($sql);
         }
     }

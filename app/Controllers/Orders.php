@@ -65,7 +65,7 @@ class Orders extends ResourceController
 
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -111,7 +111,7 @@ class Orders extends ResourceController
 
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -152,7 +152,7 @@ class Orders extends ResourceController
 
         if (!isset($data['token']))
         {
-            error_log('Token tidak dicantumkan');
+            
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -256,7 +256,7 @@ class Orders extends ResourceController
             }
         }
 
-        error_log(print_r('Token tidak ditemukan di database'));
+        
 
         return false;
     }
@@ -268,7 +268,7 @@ class Orders extends ResourceController
 
         if(!isset($data['editorID']))
         {
-            error_log(print('Editor Id tidak dicantumkan'));
+            
             return false;
         }
 
@@ -281,7 +281,7 @@ class Orders extends ResourceController
             }
         }
 
-        error_log(print('Editor Id bukan Id yang valid'));
+        
 
         return false;
     }
