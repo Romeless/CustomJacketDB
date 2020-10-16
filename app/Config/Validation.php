@@ -228,14 +228,7 @@ class Validation
 				'required' => '{field} tidak tertera',
 				'greater_than' => '{field} harus angka positif'
 			]
-		],
-		'information' => [
-			'label' => 'Informasi',
-			'rules' => 'required',
-			'errors' => [
-				'required' => '{field} harus lebih lengkap'
-			]
-		],
+		]
 	];
 
 	public $order_update = [
