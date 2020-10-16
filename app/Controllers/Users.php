@@ -112,9 +112,9 @@ class Users extends ResourceController
 
         // DELETE!
         // ONLY FOR TESTING USE      
-        $payload = [
-            "sub" => $data['googleID'],
-        ];
+        // $payload = [
+        //     "sub" => $data['googleID'],
+        // ];
 
         if ($payload) {
 
