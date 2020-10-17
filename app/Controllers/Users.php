@@ -164,9 +164,9 @@ class Users extends ResourceController
                     $token = array("token" => $id_token);
                     $tokenStatus = $this->refreshToken($credentials, $token);
 
-                    file_put_contents("php://stderr", serialize($tokenStatus));
+                    //file_put_contents("php://stderr", serialize($tokenStatus));
 
-                    return $this->respond($tokenStatus);
+                    return $this->respond(json_encode($tokenStatus));
                 }
             } 
 
@@ -191,7 +191,7 @@ class Users extends ResourceController
                 $token = array("token" => $id_token);
                 $tokenStatus = $this->refreshToken($data, $token, $device);
 
-                return $this->respondCreated($response, "Akun berhasil terbuat");
+                return $this->respondCreated(json_encode($response), "Akun berhasil terbuat");
 
             }
             
