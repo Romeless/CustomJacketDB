@@ -130,12 +130,17 @@ class Users extends ResourceController
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
 
-                file_put_contents("php://stderr", "GAuth5");
+                file_put_contents("php://stderr", "GAuth5\n");
 
                 $user = $user[0];
 
+                file_put_contents("php://stderr", $user['google']);
+
                 if($user['google'] == 1)
                 {
+
+                    file_put_contents("php://stderr", "\nGAuth6");
+
                     // LOGIN TO GOOGLE
 
                     if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
@@ -190,7 +195,7 @@ class Users extends ResourceController
 
         } else {
             file_put_contents("php://stderr", "GAuth7");
-            
+
             return $this->fail("Akun google gagal di-verifikasi");
         }
     }
