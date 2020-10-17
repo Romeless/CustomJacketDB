@@ -94,7 +94,7 @@ class Users extends ResourceController
              header("Access-Control-Allow-Origin: " . $http_origin);
         } 
 
-        file_put_contents("php://stderr", "GAuth1");
+        //file_put_contents("php://stderr", "GAuth1");
         
         header("Access-Control-Allow-Credentials: true");
 
@@ -107,7 +107,7 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
-        file_put_contents("php://stderr", "GAuth2");
+        //file_put_contents("php://stderr", "GAuth2");
 
         // Verify Token
         $id_token = $data['tokenID'];
@@ -119,27 +119,27 @@ class Users extends ResourceController
         //     "sub" => $data['googleID'],
         // ];
 
-        file_put_contents("php://stderr", "GAuth3");
+        //file_put_contents("php://stderr", "GAuth3");
 
         if ($payload) {
 
-            file_put_contents("php://stderr", "GAuth4");
+            //file_put_contents("php://stderr", "GAuth4");
 
             $userid = $payload['sub'];
 
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
 
-                file_put_contents("php://stderr", "GAuth5\n");
+                //file_put_contents("php://stderr", "GAuth5\n");
 
                 $user = $user[0];
 
-                file_put_contents("php://stderr", $user['google']);
+                //file_put_contents("php://stderr", $user['google']);
 
                 if($user['google'] == 1)
                 {
 
-                    file_put_contents("php://stderr", "\nGAuth6");
+                    //file_put_contents("php://stderr", "\nGAuth6");
 
                     // LOGIN TO GOOGLE
 
@@ -159,18 +159,18 @@ class Users extends ResourceController
                         $credentials['device'] = "n/a";
                     }
 
-                    file_put_contents("php://stderr", "GAuth7\n");
+                    //file_put_contents("php://stderr", "GAuth7\n");
 
                     $token = array("token" => $id_token);
                     $tokenStatus = $this->refreshToken($credentials, $token);
 
-                    file_put_contents("php://stderr", print_r($tokenStatus));
+                    file_put_contents("php://stderr", serialize($tokenStatus));
 
                     return $this->respond($tokenStatus);
                 }
             } 
 
-            file_put_contents("php://stderr", "GAuth6");
+            //file_put_contents("php://stderr", "GAuth6");
             
             // REGISTER NEW ACCOUNT FROM GOOGLE
 
@@ -188,7 +188,7 @@ class Users extends ResourceController
             if($this->model->save($data))
             {
                     
-                $token = $id_token;
+                $token = array("token" => $id_token);
                 $tokenStatus = $this->refreshToken($data, $token, $device);
 
                 return $this->respondCreated($response, "Akun berhasil terbuat");
@@ -198,7 +198,7 @@ class Users extends ResourceController
             return $this->fail("Akun baru tidak berhasil dibuat");
 
         } else {
-            file_put_contents("php://stderr", "GAuth7");
+            //file_put_contents("php://stderr", "GAuth7");
 
             return $this->fail("Akun google gagal di-verifikasi");
         }
