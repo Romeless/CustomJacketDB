@@ -110,7 +110,6 @@ class Users extends ResourceController
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
         $payload = $client->verifyIdToken($id_token);
 
-        // DELETE!
         // ONLY FOR TESTING USE      
         // $payload = [
         //     "sub" => $data['googleID'],
@@ -122,55 +121,59 @@ class Users extends ResourceController
 
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
-                // LOGIN TO GOOGLE
-
                 $user = $user[0];
 
-                if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
+                if($user['google'] == 1)
                 {
-                    $credentials = $credentials[0];
-                } else
-                {
-                    return $this->failNotFound("Username tidak terdaftar");
+                    // LOGIN TO GOOGLE
+
+                    if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
+                    {
+                        $credentials = $credentials[0];
+                    } else
+                    {
+                        return $this->failNotFound("Username tidak terdaftar");
+                    }
+
+                    if(isset($data['device']))
+                    {
+                        $credentials['device'] = $data['device'];
+                    } else
+                    {
+                        $credentials['device'] = "n/a";
+                    }
+
+                    $token = $id_token;
+                    $tokenStatus = $this->refreshToken($credentials, $token);
+
+                    return $this->respond($tokenStatus);
                 }
+            } 
+            
+            // REGISTER NEW ACCOUNT FROM GOOGLE
 
-                if(isset($data['device']))
-                {
-                    $credentials['device'] = $data['device'];
-                } else
-                {
-                    $credentials['device'] = "n/a";
-                }
+            $email_parts = explode('@', $data['email']);
 
-                $token = $this->generateToken();
-                $tokenStatus = $this->refreshToken($credentials, $token);
+            $data['username'] = $email_parts[0].$userid;
+            $data['joinDate'] = date(DATE_FORMAT);
+            $data['google'] = 1;
 
-                return $this->respond($tokenStatus);
-
-            } else {
-                // REGISTER NEW ACCOUNT FROM GOOGLE
-
-                $email_parts = explode('@', $data['email']);
-
-                $data['username'] = $email_parts[0].$userid;
-                $data['joinDate'] = date(DATE_FORMAT);
-
-                if(!isset($data['device']))
-                {
-                   $data['device'] = "n/a";
-                }
-
-                if($this->model->save($data))
-                {
-                    
-                    $token = $this->generateToken();
-                    $tokenStatus = $this->refreshToken($data, $token, $device);
-
-                    return $this->respondCreated($response, "Akun berhasil terbuat");
-
-                }
-                return $this->fail("Akun baru tidak berhasil dibuat");
+            if(!isset($data['device']))
+            {
+               $data['device'] = "n/a";
             }
+
+            if($this->model->save($data))
+            {
+                    
+                $token = $id_token;
+                $tokenStatus = $this->refreshToken($data, $token, $device);
+
+                return $this->respondCreated($response, "Akun berhasil terbuat");
+
+            }
+            
+            return $this->fail("Akun baru tidak berhasil dibuat");
 
         } else {
             return $this->fail("Akun google gagal di-verifikasi");

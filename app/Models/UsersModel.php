@@ -11,7 +11,6 @@ class UsersModel extends Model
     protected $allowedFields = [
         'username', 
         'fullName', 
-        'tokenID',
         'email',
         'password',
         'salt',
@@ -21,7 +20,8 @@ class UsersModel extends Model
         'verified',
         'joinDate',
         'lastLogin',
-        'admin'
+        'admin',
+        'google'
     ];
 
     protected $returnType = 'array';
