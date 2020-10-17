@@ -161,7 +161,7 @@ class Users extends ResourceController
 
                     file_put_contents("php://stderr", "GAuth7\n");
 
-                    $token = $id_token;
+                    $token = array("token" => $id_token);
                     $tokenStatus = $this->refreshToken($credentials, $token);
 
                     file_put_contents("php://stderr", print_r($tokenStatus));
