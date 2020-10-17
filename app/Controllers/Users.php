@@ -93,6 +93,8 @@ class Users extends ResourceController
         {  
              header("Access-Control-Allow-Origin: " . $http_origin);
         } 
+
+        file_put_contents("php://stderr", "GAuth1");
         
         header("Access-Control-Allow-Credentials: true");
 
@@ -105,6 +107,8 @@ class Users extends ResourceController
             return $this->fail($errors);
         }
 
+        file_put_contents("php://stderr", "GAuth2");
+
         // Verify Token
         $id_token = $data['tokenID'];
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
@@ -115,12 +119,19 @@ class Users extends ResourceController
         //     "sub" => $data['googleID'],
         // ];
 
+        file_put_contents("php://stderr", "GAuth3");
+
         if ($payload) {
+
+            file_put_contents("php://stderr", "GAuth4");
 
             $userid = $payload['sub'];
 
             if($user = $this->model->findByColumn(["email"], [$data['email']]))
             {
+
+                file_put_contents("php://stderr", "GAuth5");
+
                 $user = $user[0];
 
                 if($user['google'] == 1)
@@ -149,6 +160,8 @@ class Users extends ResourceController
                     return $this->respond($tokenStatus);
                 }
             } 
+
+            file_put_contents("php://stderr", "GAuth6");
             
             // REGISTER NEW ACCOUNT FROM GOOGLE
 
@@ -176,6 +189,8 @@ class Users extends ResourceController
             return $this->fail("Akun baru tidak berhasil dibuat");
 
         } else {
+            file_put_contents("php://stderr", "GAuth7");
+            
             return $this->fail("Akun google gagal di-verifikasi");
         }
     }
