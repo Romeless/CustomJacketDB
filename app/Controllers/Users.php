@@ -159,8 +159,12 @@ class Users extends ResourceController
                         $credentials['device'] = "n/a";
                     }
 
+                    file_put_contents("php://stderr", "GAuth7\n");
+
                     $token = $id_token;
                     $tokenStatus = $this->refreshToken($credentials, $token);
+
+                    file_put_contents("php://stderr", print_r($tokenStatus));
 
                     return $this->respond($tokenStatus);
                 }
