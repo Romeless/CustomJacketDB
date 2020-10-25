@@ -61,7 +61,7 @@ class Users extends ResourceController
         }
 
         if (!password_verify($data['password'], $credentials['password']))
-        {    
+        {
             return $this->fail('Password salah');
         }
 
@@ -90,12 +90,12 @@ class Users extends ResourceController
         }
 
         if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
-        {  
+        {
              header("Access-Control-Allow-Origin: " . $http_origin);
-        } 
+        }
 
         //file_put_contents("php://stderr", "GAuth1");
-        
+
         header("Access-Control-Allow-Credentials: true");
 
         $data = $this->request->getPost();
@@ -114,7 +114,7 @@ class Users extends ResourceController
         $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
         $payload = $client->verifyIdToken($id_token);
 
-        // ONLY FOR TESTING USE      
+        // ONLY FOR TESTING USE
         // $payload = [
         //     "sub" => $data['googleID'],
         // ];
@@ -168,10 +168,10 @@ class Users extends ResourceController
 
                     return $this->respond(json_encode($tokenStatus));
                 }
-            } 
+            }
 
             //file_put_contents("php://stderr", "GAuth6");
-            
+
             // REGISTER NEW ACCOUNT FROM GOOGLE
 
             $email_parts = explode('@', $data['email']);
@@ -187,14 +187,14 @@ class Users extends ResourceController
 
             if($this->model->save($data))
             {
-                    
+
                 $token = array("token" => $id_token);
                 $tokenStatus = $this->refreshToken($data, $token, $device);
 
-                return $this->respondCreated(json_encode($response), "Akun berhasil terbuat");
+                return $this->respondCreated(json_encode($tokenStatus), "Akun berhasil terbuat");
 
             }
-            
+
             return $this->fail("Akun baru tidak berhasil dibuat");
 
         } else {
@@ -217,7 +217,7 @@ class Users extends ResourceController
         if (!isset($data['token']))
         {
             $data['token'] = "TOKENWHATSTHAT";
-        } 
+        }
 
         $token_validate = $this->validation->run($data, 'user_validation');
         $validate = $this->validation->run($data, 'update_user');
@@ -246,8 +246,8 @@ class Users extends ResourceController
             {
                 return $this->respondUpdated($user, 'User profil update berhasil!');
             }
-        } 
-        
+        }
+
         return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
@@ -275,7 +275,7 @@ class Users extends ResourceController
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -290,7 +290,7 @@ class Users extends ResourceController
                 return $this->respondDeleted('Id '.$id.' Terhapus');
             }
         }
-        
+
         return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
     }
 
@@ -312,16 +312,16 @@ class Users extends ResourceController
         {
             return $this->respond($cred);
         }
-        
+
         return $this->failNotFound('User tidak ada');
     }
 
     private function refreshToken($credentials, $token)
     {
         $model = model('App\Models\TokensModel');
-        
+
         $token_cred = [];
-        
+
         if ($token_cred = $model->findByUserIdAndDevice($credentials['id'], $credentials['device']))
         {
             $token_cred = $token_cred[0];
@@ -360,7 +360,7 @@ class Users extends ResourceController
             }
 
             $user = $this->model->find($token_cred['userID']);
-            
+
             if($user['admin'] == 1)
             {
                 return true;
@@ -379,7 +379,7 @@ class Users extends ResourceController
 
         if($cred = $this->model->find($data['editorID']))
         {
-            
+
 
             if($cred['admin'] == 1)
             {
