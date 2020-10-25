@@ -21,7 +21,7 @@ class Orders extends ResourceController
     public function create()
     {
         $data = $this->request->getPost();
-        
+
         $validate = $this->validation->run($data, 'order_validation');
         $errors = $this->validation->getErrors();
 
@@ -46,7 +46,7 @@ class Orders extends ResourceController
 
         $data['username'] = $userData['username'];
         $data['email'] = $userData['email'];
-        
+
         if($this->model->save($data))
         {
             return $this->respondCreated($data, 'Order Created');
@@ -63,9 +63,12 @@ class Orders extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
+
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -78,7 +81,7 @@ class Orders extends ResourceController
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -109,18 +112,21 @@ class Orders extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
+
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
-        } else 
+        } else
         {
             $tokenConfirmation = $this->confirmToken($data);
         }
@@ -131,13 +137,13 @@ class Orders extends ResourceController
             {
                 return $this->respondDeleted('Order Id '.$id.' Deleted');
             }
-            
+
             return $this->fail('Order gagal dihapus');
         }
 
         return $this->failUnauthorized("Tidak diperbolehkan melakukan operasi ini");
 
-        
+
     }
 
     public function remove($id = null)
@@ -150,14 +156,17 @@ class Orders extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
 
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
+
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -222,7 +231,7 @@ class Orders extends ResourceController
         $post = $this->request->getPost();
         $userID = $post['userID'];
         $designID = $post['designID'];
-        
+
         $data = $this->model->findOrderDetails($userID, $designID);
 
         if($data)
@@ -249,14 +258,12 @@ class Orders extends ResourceController
             }
 
             $user = $userModel->find($token_cred['userID']);
-            
+
             if($user['admin'] == 1)
             {
                 return true;
             }
         }
-
-        
 
         return false;
     }
@@ -268,7 +275,7 @@ class Orders extends ResourceController
 
         if(!isset($data['editorID']))
         {
-            
+
             return false;
         }
 
@@ -281,7 +288,7 @@ class Orders extends ResourceController
             }
         }
 
-        
+
 
         return false;
     }

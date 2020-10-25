@@ -24,14 +24,14 @@ class Designs extends ResourceController
         {
             return $this->respond($this->model->findShareable($id));
         }
-        
+
         return $this->respond($this->model->findAllShareable());
     }
 
     public function create()
     {
         $data = $this->request->getPost();
-        
+
         $validate = $this->validation->run($data, 'design_validation');
         $errors = $this->validation->getErrors();
 
@@ -60,9 +60,13 @@ class Designs extends ResourceController
         $data = $this->request->getRawInput();
         $data['id'] = $id;
         $data['updateDate'] = date(DATE_FORMAT);
+
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
+        
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
@@ -75,7 +79,7 @@ class Designs extends ResourceController
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -103,15 +107,18 @@ class Designs extends ResourceController
 
         $data = $this->request->getRawInput();;
         $data['id'] = $id;
-        
+
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
+
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -141,17 +148,20 @@ class Designs extends ResourceController
             return $this->fail('Design id tidak ditemukan');
         }
 
-        $data = $this->request->getRawInput();;
+        $data = $this->request->getRawInput();
         $data['id'] = $id;
+
+        $design = $this->model->findById($id);
+        $data['userID'] = $design['userID'];
 
         if (!isset($data['token']))
         {
-            
+
             $data['token'] = "TOKENWHATSTHAT";
         }
 
         $roleConfirmation = $this->confirmRole($data);
-        
+
         if ($roleConfirmation)
         {
             $tokenConfirmation = true;
@@ -213,14 +223,12 @@ class Designs extends ResourceController
             }
 
             $user = $userModel->find($token_cred['userID']);
-            
+
             if($user['admin'] == 1)
             {
                 return true;
             }
         }
-
-        
 
         return false;
     }
@@ -232,7 +240,7 @@ class Designs extends ResourceController
 
         if(!isset($data['editorID']))
         {
-            
+
             return false;
         }
 
@@ -244,8 +252,6 @@ class Designs extends ResourceController
                 return true;
             }
         }
-
-        
 
         return false;
     }
