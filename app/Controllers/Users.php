@@ -91,8 +91,10 @@ class Users extends ResourceController
 
         if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
         {
-            header("Access-Control-Allow-Origin: " . $http_origin);
+             header("Access-Control-Allow-Origin: " . $http_origin);
         }
+
+        //file_put_contents("php://stderr", "GAuth1");
 
         header("Access-Control-Allow-Credentials: true");
 
@@ -104,6 +106,8 @@ class Users extends ResourceController
         {
             return $this->fail($errors);
         }
+
+        //file_put_contents("php://stderr", "GAuth2");
 
         // Verify Token
         $id_token = $data['tokenID'];
