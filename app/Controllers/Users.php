@@ -89,7 +89,11 @@ class Users extends ResourceController
             $http_origin = "localhost:8080";
         }
 
-        header("Access-Control-Allow-Origin: " . $http_origin);
+        if ($http_origin == "https://hudie-custom.herokuapp.com" || $http_origin == "localhost:8080")
+        {
+            header("Access-Control-Allow-Origin: " . $http_origin);
+        }
+
         header("Access-Control-Allow-Credentials: true");
 
         $data = $this->request->getPost();
