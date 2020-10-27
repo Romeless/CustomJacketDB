@@ -82,3 +82,4 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 # ------------------------------------------------- #
 
 defined('CLIENT_ID') || define('CLIENT_ID', '334821050843-7ibsrhu7b07inds7n1rvcaj6u2bkp2co.apps.googleusercontent.com');
+defined('CLIENT_ID_APP') || define('CLIENT_ID_APP', '334821050843-q0853roui2istdq11erdeim0pbje9270.apps.googleusercontent.com');
