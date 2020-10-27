@@ -36,7 +36,6 @@ $routes->get('/Token', 'Token::index');
 $routes->add('/todo/api/0.1/users', 'Users::index');
 $routes->add('/todo/api/0.1/users/create', 'Users::create');
 $routes->add('/todo/api/0.1/users/googleAuth', 'Users::google_auth');
-$routes->add('/todo/api/0.1/users/googleAuthMobile', 'Users::google_auth_mobile');
 $routes->add('/todo/api/0.1/users/update/(:num)', 'Users::update/$1');
 $routes->add('/todo/api/0.1/users/delete/(:num)', 'Users::delete/$1');
 $routes->add('/todo/api/0.1/users/show/(:num)', 'Users::show/$1');
