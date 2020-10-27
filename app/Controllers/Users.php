@@ -206,7 +206,7 @@ class Users extends ResourceController
 
       // Verify Token
       $id_token = $data['tokenID'];
-      $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
+      $client = new \Google_Client(['client_id' => CLIENT_ID_APP]);  // Specify the CLIENT_ID of the app that accesses the backend
       $payload = $client->verifyIdToken($id_token);
       // ONLY FOR TESTING USEa
       // $payload = [
