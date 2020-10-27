@@ -204,6 +204,8 @@ class Users extends ResourceController
           return $this->fail($errors);
       }
 
+      return $this->fail("You Got Here");
+
 
       // Verify Token
       $id_token = $data['tokenID'];
