@@ -195,6 +195,8 @@ class Users extends ResourceController
 
     public function google_auth_mobile()
     {
+      return $this->fail("You Got Here");
+      
       $data = $this->request->getPost();
       $validate = $this->validation->run($data, 'google_auth');
       $errors = $this->validation->getErrors();
