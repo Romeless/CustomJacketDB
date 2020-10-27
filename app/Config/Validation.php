@@ -265,7 +265,7 @@ class Validation
 		]
 	];
 
-	public $verify_token = [
+	public $verify_google_token = [
 		'token' => [
 			'label' => 'Token',
 			'rules' => 'required',
