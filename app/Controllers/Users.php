@@ -280,7 +280,7 @@ class Users extends ResourceController
 
             file_put_contents("php://stderr", "GAuth6");
 
-            // REGISTER NEW ACCOUNT FROM GOOGLE
+            // REGISTER NEW ACCOUNT FROM $routes->add('/todo/api/0.1/users/googleAuth', 'Users::google_auth');
 
             $email_parts = explode('@', $data['email']);
 
