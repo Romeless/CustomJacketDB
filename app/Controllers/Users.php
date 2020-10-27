@@ -204,6 +204,114 @@ class Users extends ResourceController
         }
     }
 
+    public function google_auth_mobile()
+    {
+        $data = $this->request->getPost();
+        $validate = $this->validation->run($data, 'google_auth');
+        $errors = $this->validation->getErrors();
+
+        if($errors)
+        {
+            return $this->fail($errors);
+        }
+
+        file_put_contents("php://stderr", "GAuth2");
+
+        // Verify Token
+        $id_token = $data['tokenID'];
+        $client = new \Google_Client(['client_id' => CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
+        $payload = $client->verifyIdToken($id_token);
+
+        // ONLY FOR TESTING USE
+        // $payload = [
+        //     "sub" => $data['googleID'],
+        // ];
+
+        file_put_contents("php://stderr", "GAuth3");
+
+        if ($payload) {
+
+            file_put_contents("php://stderr", "GAuth4");
+
+            $userid = $payload['sub'];
+
+            if($user = $this->model->findByColumn(["email"], [$data['email']]))
+            {
+
+                file_put_contents("php://stderr", "GAuth5\n");
+
+                $user = $user[0];
+
+                file_put_contents("php://stderr", $user['google']);
+
+                if($user['google'] == 1)
+                {
+
+                    file_put_contents("php://stderr", "\nGAuth6");
+
+                    // LOGIN TO GOOGLE
+
+                    if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
+                    {
+                        $credentials = $credentials[0];
+                    } else
+                    {
+                        return $this->failNotFound("Username tidak terdaftar");
+                    }
+
+                    if(isset($data['device']))
+                    {
+                        $credentials['device'] = $data['device'];
+                    } else
+                    {
+                        $credentials['device'] = "n/a";
+                    }
+
+                    file_put_contents("php://stderr", "GAuth7\n");
+
+                    $token = array("token" => $id_token);
+                    $tokenStatus = $this->refreshToken($credentials, $token);
+
+                    file_put_contents("php://stderr", serialize($tokenStatus));
+
+                    return $this->respond(json_encode($tokenStatus));
+                }
+            }
+
+            file_put_contents("php://stderr", "GAuth6");
+
+            // REGISTER NEW ACCOUNT FROM GOOGLE
+
+            $email_parts = explode('@', $data['email']);
+
+            $data['username'] = $email_parts[0].$userid;
+            $data['joinDate'] = date(DATE_FORMAT);
+            $data['google'] = 1;
+
+            if(!isset($data['device']))
+            {
+               $data['device'] = "n/a";
+            }
+
+            if($this->model->save($data))
+            {
+
+                $token = array("token" => $id_token);
+                $tokenStatus = $this->refreshToken($data, $token, $device);
+
+                return $this->respondCreated(json_encode($tokenStatus), "Akun berhasil terbuat");
+
+            }
+
+            return $this->fail("Akun baru tidak berhasil dibuat");
+
+        } else {
+            file_put_contents("php://stderr", "GAuth7");
+
+            return $this->fail("Akun google gagal di-verifikasi");
+        }
+    }
+
     public function update($id = null)
     {
         if(!$this->model->findById($id))

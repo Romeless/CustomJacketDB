@@ -96,7 +96,7 @@ class Validation
 				'max_length' => 'Panjang {field} maksimal 60 huruf',
 			],
 		],
-		
+
 	];
 
 	public $google_auth = [
@@ -247,4 +247,32 @@ class Validation
 			]
 		],
 	];
+
+	public $verify_token = [
+		'token' => [
+			'label' => 'Token',
+			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} dibutuhkan'
+			],
+			'email' => [
+				'label' => 'Email',
+				'rules' => 'required',
+				'errors' => [
+					'required' => '{email} dibutuhkan'
+				]
+			]
+		]
+	];
+
+	public $verify_token = [
+		'token' => [
+			'label' => 'Token',
+			'rules' => 'required',
+			'errors' => [
+				'required' => '{field} dibutuhkan'
+			]
+		]
+	];
+
 }

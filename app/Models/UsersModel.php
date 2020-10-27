@@ -9,8 +9,8 @@ class UsersModel extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'username', 
-        'fullName', 
+        'username',
+        'fullName',
         'email',
         'password',
         'salt',
@@ -71,15 +71,15 @@ class UsersModel extends Model
             }
         }
 
-        // 
-        
+        //
+
         try {
             if ($result = $this->db->query($sql, $values)) {
                 return $result->getResultArray();
             }
         } catch (Exception $e)
         {
-            
+
             return($sql);
         }
     }
@@ -91,5 +91,14 @@ class UsersModel extends Model
         if ($result = $this->db->query($sql, [$username])) {
             return $result->getResultArray();
         }
+    }
+
+    public function findByEmail($email, $google = 0)
+    {
+      $sql = "SELECT * FROM users WHERE email = ? AND google = ?";
+
+      if ($result = $this->db->query($sql, [$email, $google])) {
+          return $result->getResultArray();
+      }
     }
 }

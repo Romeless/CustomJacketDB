@@ -61,6 +61,8 @@ $routes->add('/todo/api/0.1/orders/user/(:num)', 'Orders::showByUserID/$1');
 $routes->add('/todo/api/0.1/orders/design/(:num)', 'Orders::showByDesignID/$1');
 $routes->add('/todo/api/0.1/orders/confirm', 'Orders::showOrderDetails');
 
+
+//$routes->add('/todo/api/0.1/tokens/verify', 'Tokens::verifyToken');
 /**
  * --------------------------------------------------------------------
  * Additional Routing
