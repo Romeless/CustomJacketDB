@@ -218,15 +218,9 @@ class Users extends ResourceController
 
           if($user = $this->model->findByColumn(["email"], [$data['email']]))
           {
-
-
               $user = $user[0];
-
-
               if($user['google'] == 1)
               {
-
-
                   // LOGIN TO GOOGLE
 
                   if($credentials = $this->model->findByColumn(['username'], [$user['username']]))
