@@ -204,22 +204,17 @@ class Users extends ResourceController
           return $this->fail($errors);
       }
 
-
-
       // Verify Token
       $id_token = $data['tokenID'];
       $client = new \Google_Client(['client_id' => "334821050843-mth9gi43kp6097pc2tmfjhfg7fun93d1.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
       $payload = $client->verifyIdToken($id_token);
-
-      // ONLY FOR TESTING USE
+      // ONLY FOR TESTING USEa
       // $payload = [
       //     "sub" => $data['googleID'],
-      // ];
+      // ];$aya
 
-      return $this->failNotFound("YOU GOT HERE");
+      return $this->failNotFound($ay);a
 
-
-      if ($payload) {
 
 
           $userid = $payload['sub'];
@@ -290,7 +285,7 @@ class Users extends ResourceController
 
       } else {
 
-          return $this->fail("Akun google gagal di-verifikasi");
+          return $this->fail($id_token);
       }
     }
 
