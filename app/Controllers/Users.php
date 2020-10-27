@@ -213,10 +213,7 @@ class Users extends ResourceController
       //     "sub" => $data['googleID'],
       // ];$aya
 
-      return $this->failNotFound($ay);a
-
-
-
+      if (payload) {
           $userid = $payload['sub'];
 
           if($user = $this->model->findByColumn(["email"], [$data['email']]))
