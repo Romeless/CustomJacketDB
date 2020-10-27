@@ -195,8 +195,6 @@ class Users extends ResourceController
 
     public function google_auth_mobile()
     {
-      return $this->fail("You Got Here");
-      
       $data = $this->request->getPost();
       $validate = $this->validation->run($data, 'google_auth');
       $errors = $this->validation->getErrors();
@@ -206,9 +204,8 @@ class Users extends ResourceController
           return $this->fail($errors);
       }
 
-      return $this->fail("You Got Here");
-
-
+      return $this->failNotFound("YOU GOT HERE");
+      
       // Verify Token
       $id_token = $data['tokenID'];
       $client = new \Google_Client(['client_id' => "334821050843-mth9gi43kp6097pc2tmfjhfg7fun93d1.apps.googleusercontent.com"]);  // Specify the CLIENT_ID of the app that accesses the backend
