@@ -238,14 +238,7 @@ class Validation
 			'errors' => [
 				'required' => '{field} tidak tertera'
 			]
-		],
-		'designID' => [
-			'label' => 'Design',
-			'rules' => 'required',
-			'errors' => [
-				'required' => '{field} tidak tertera'
-			]
-		],
+		]
 	];
 
 	public $verify_token = [

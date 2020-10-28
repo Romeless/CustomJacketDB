@@ -72,7 +72,7 @@ class Orders extends ResourceController
             $data['token'] = "TOKENWHATSTHAT";
         }
 
-        $validate = $this->validation->run($data, 'order_validation');
+        $validate = $this->validation->run($data, '$order_update');
         $errors = $this->validation->getErrors();
 
         if($errors)
