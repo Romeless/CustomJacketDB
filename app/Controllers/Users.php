@@ -253,7 +253,7 @@ class Users extends ResourceController
           $data['username'] = $email_parts[0].$userid;
           $data['joinDate'] = date(DATE_FORMAT);
           $data['google'] = 1;
-          $data['device'] = $device
+          $data['device'] = $device;
 
           if(!isset($data['device']))
           {
@@ -263,7 +263,7 @@ class Users extends ResourceController
           if($this->model->save($data))
           {
 
-              $data['id'] = $this->model->getInsertID(); 
+              $data['id'] = $this->model->getInsertID();
 
               $token = array("token" => $id_token);
               $tokenStatus = $this->refreshToken($data, $token);
