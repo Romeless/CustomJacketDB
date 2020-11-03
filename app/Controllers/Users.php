@@ -261,16 +261,16 @@ class Users extends ResourceController
              $data['device'] = "n/a";
           }
 
-          if($this->model->save($data))
+          if($data = $this->model->save($data))
           {
 
               $token = array("token" => $id_token);
-              $tokenStatus = $this->refreshToken($data, $token, $device);
+              $tokenStatus = $this->refreshToken($data, $token);
+              $tokenStatus
 
-              return $this->respondCreated(json_encode($tokenStatus), "Akun berhasil terbuat");
+              return $this->respond(json_encode($tokenStatus));
 
           }
-
           return $this->fail("Akun baru tidak berhasil dibuat");
 
       } else {
