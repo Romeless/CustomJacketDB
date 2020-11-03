@@ -74,7 +74,7 @@ class Users extends ResourceController
         }
 
         $token = $this->generateToken();
-        $tokenStatus = $this->refreshToken($credentials, $token, $device);
+        $tokenStatus = $this->refreshToken($credentials, $token);
 
         return $this->respond($tokenStatus);
     }
@@ -178,9 +178,10 @@ class Users extends ResourceController
             {
 
                 $token = array("token" => $id_token);
-                $tokenStatus = $this->refreshToken($data, $token, $device);
+                $tokenStatus = $this->refreshToken($data, $token);
 
-                return $this->respond(json_encode($tokenStatus));
+                return $this->respondCreated(json_encode($tokenStatus), "Akun berhasil terbuat");
+
             }
 
             return $this->fail("Akun baru tidak berhasil dibuat");
