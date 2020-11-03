@@ -161,7 +161,6 @@ class Users extends ResourceController
                 }
             }
 
-
             // REGISTER NEW ACCOUNT FROM GOOGLE
 
             $email_parts = explode('@', $data['email']);
@@ -181,8 +180,7 @@ class Users extends ResourceController
                 $token = array("token" => $id_token);
                 $tokenStatus = $this->refreshToken($data, $token, $device);
 
-                return $this->respondCreated(json_encode($tokenStatus), "Akun berhasil terbuat");
-
+                return $this->respond(json_encode($tokenStatus));
             }
 
             return $this->fail("Akun baru tidak berhasil dibuat");
