@@ -62,6 +62,11 @@ $routes->add('/todo/api/0.1/orders/user/(:num)', 'Orders::showByUserID/$1');
 $routes->add('/todo/api/0.1/orders/design/(:num)', 'Orders::showByDesignID/$1');
 $routes->add('/todo/api/0.1/orders/confirm', 'Orders::showOrderDetails');
 
+$routes->add('/todo/api/0.1/logs', 'Logs::index');
+$routes->add('/todo/api/0.1/logs/create', 'Logs::create');
+$routes->add('/todo/api/0.1/logs/update/(:num)', 'Logs::update/$1');
+$routes->add('/todo/api/0.1/logs/delete/(:num)', 'Logs::delete/$1');
+$routes->add('/todo/api/0.1/logs/show/(:num)', 'Logs::show/$1');
 
 //$routes->add('/todo/api/0.1/tokens/verify', 'Tokens::verifyToken');
 /**
