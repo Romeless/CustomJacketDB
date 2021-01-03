@@ -284,5 +284,5 @@ class Validation
 				'required' => '{field} tidak tertera'
 			]
 		],
-	]
+	];
 }
