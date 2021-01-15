@@ -268,21 +268,4 @@ class Validation
 		]
 	];
 
-	public $log_action = [
-		'userID' => [
-			'label' => 'User',
-			'rules' => 'required',
-			'errors' => [
-				'required' => '{field} tidak tertera'
-			]
-		],
-
-		'activity' => [
-			'label' => 'Action',
-			'rules' => 'required',
-			'errors' => [
-				'required' => '{field} tidak tertera'
-			]
-		],
-	];
 }
